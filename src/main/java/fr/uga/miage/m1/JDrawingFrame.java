@@ -1,5 +1,8 @@
 package fr.uga.miage.m1;
 
+import fr.uga.miage.m1.commands.Editor;
+import fr.uga.miage.m1.commands.Undo;
+import fr.uga.miage.m1.exceptions.LocationException;
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.Circle;
@@ -15,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static java.lang.String.*;
@@ -48,6 +52,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private final ArrayList<SimpleShape> listShapes = new ArrayList<>();
 
+    // Editor to manage commands
+    private Editor editor;
+
     /**
      * Tracks buttons to manage the background.
      */
@@ -67,6 +74,27 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         panel.setMinimumSize(new Dimension(400, 400));
         panel.addMouseListener(this);
         panel.addMouseMotionListener(this);
+        panel.setFocusable(true);
+
+        // Instantiates components to manage commands
+        editor = new Editor();
+        // add listener to the panel
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "undo");
+        panel.getActionMap().put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editor.addCommand(new Undo(listShapes));
+                try {
+                    editor.play();
+                } catch (LocationException ex) {
+                    throw new RuntimeException(ex);
+                }
+                for (SimpleShape shape : listShapes) {
+                    shape.draw((Graphics2D) panel.getGraphics());
+                }
+            }
+        });
+
         label = new JLabel(" ", SwingConstants.CENTER);
         JButton buttonJSON = new JButton("Export JSON", null);
         JButton buttonXML = new JButton("Export XML", null);
@@ -247,6 +275,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 }
             }
         }
+
+        public List<SimpleShape> getListShapes() {
+            return listShapes;
+        }
+
 
 
         /**
