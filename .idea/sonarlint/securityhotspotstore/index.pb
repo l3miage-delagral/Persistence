@@ -18,5 +18,3 @@ i
 9src/main/java/fr/uga/miage/m1/persistence/XMLVisitor.java,6\4\6414a58e19058baa2f5fc3a2f02edfeb6e1fcf5c
 b
 2src/main/java/fr/uga/miage/m1/shapes/Triangle.java,2\4\240b86d4fb1c470cd0651f4a09814d2d9f2e91f2
-o
-?src/main/java/fr/uga/miage/m1/exceptions/LocationException.java,6\5\65e5d31d297417d2c5d91d3398a361f9abd93812

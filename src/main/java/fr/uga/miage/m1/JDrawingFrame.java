@@ -47,9 +47,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private final ArrayList<SimpleShape> listShapes = new ArrayList<>();
 
-    // Editor to manage commands
-    //private final transient Editor editor;
-
     /**
      * Tracks buttons to manage the background.
      */
@@ -70,9 +67,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         panel.addMouseListener(this);
         panel.addMouseMotionListener(this);
         panel.setFocusable(true);
-
-        // Instantiates components to manage commands
-        // editor = new Editor();
 
         label = new JLabel(" ", SwingConstants.CENTER);
         JButton buttonJSON = new JButton("Export JSON", null);

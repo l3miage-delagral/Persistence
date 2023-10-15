@@ -4,10 +4,8 @@ import fr.uga.miage.m1.commands.Command;
 import fr.uga.miage.m1.commands.Editor;
 import fr.uga.miage.m1.commands.Undo;
 import fr.uga.miage.m1.exceptions.LocationException;
-import fr.uga.miage.m1.shapes.SimpleShape;
 
 import java.awt.event.*;
-import java.util.List;
 import javax.swing.*;
 
 /**
@@ -32,7 +30,7 @@ public class GUIHelper {
                 try {
                     invoker.play();
             } catch (LocationException ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

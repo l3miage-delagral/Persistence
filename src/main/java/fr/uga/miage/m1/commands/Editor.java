@@ -1,7 +1,6 @@
 package fr.uga.miage.m1.commands;
 
 import fr.uga.miage.m1.exceptions.LocationException;
-import fr.uga.miage.m1.shapes.SimpleShape;
 
 import java.util.ArrayList;
 import java.util.List;

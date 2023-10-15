@@ -18,5 +18,3 @@ e
 0src/main/java/fr/uga/miage/m1/shapes/Square.java,0\2\02b6cc968e52f13e74944c5a9db15a4de6282f00
 b
 2src/main/java/fr/uga/miage/m1/shapes/Triangle.java,2\4\240b86d4fb1c470cd0651f4a09814d2d9f2e91f2
-o
-?src/main/java/fr/uga/miage/m1/exceptions/LocationException.java,6\5\65e5d31d297417d2c5d91d3398a361f9abd93812
