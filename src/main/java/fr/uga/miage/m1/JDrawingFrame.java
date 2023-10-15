@@ -240,6 +240,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         label.setText("(" + evt.getX() + "," + evt.getY() + ")");
     }
 
+    public List<SimpleShape> getListShapes() {
+        return listShapes;
+    }
+
+
     /**
      * Simple action listener for shape tool bar buttons that sets
      * the drawing frame's currently selected shape when receiving
@@ -275,11 +280,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 }
             }
         }
-
-        public List<SimpleShape> getListShapes() {
-            return listShapes;
-        }
-
 
 
         /**
@@ -369,7 +369,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             // Appeler la fenêtre d'enregistrement
             exportWindow("XML", resultString);
         }
-
 
         /**
          * Window to save a file

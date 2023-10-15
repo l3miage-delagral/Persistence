@@ -1,8 +1,12 @@
 package fr.uga.miage.m1;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
+import fr.uga.miage.m1.commands.Command;
+import fr.uga.miage.m1.commands.Editor;
+import fr.uga.miage.m1.commands.Undo;
+import fr.uga.miage.m1.exceptions.LocationException;
+
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  *  @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
@@ -15,6 +19,18 @@ public class GUIHelper {
 
     public static void showOnFrame(String frameName) {
         JFrame frame = new JDrawingFrame(frameName);
+
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "undo");
+        frame.getRootPane().getActionMap().put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Command command = new Undo(frame.getShape());
+                Editor invoker = new Editor();
+                invoker.addCommand(command);
+                invoker.play();
+            }
+        });
+        
         WindowAdapter wa = new WindowAdapter() {
 
             @Override
