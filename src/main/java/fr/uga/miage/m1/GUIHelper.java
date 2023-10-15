@@ -4,8 +4,10 @@ import fr.uga.miage.m1.commands.Command;
 import fr.uga.miage.m1.commands.Editor;
 import fr.uga.miage.m1.commands.Undo;
 import fr.uga.miage.m1.exceptions.LocationException;
+import fr.uga.miage.m1.shapes.SimpleShape;
 
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -14,25 +16,28 @@ import javax.swing.*;
 public class GUIHelper {
 
     // private constructor to avoid instantiation
-    private GUIHelper() {
+    private GUIHelper() { // empty constructor
     }
 
     public static void showOnFrame(String frameName) {
-        JFrame frame = new JDrawingFrame(frameName);
+        JDrawingFrame frame = new JDrawingFrame(frameName);
 
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "undo");
         frame.getRootPane().getActionMap().put("undo", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Command command = new Undo(frame.getShape());
+                Command command = new Undo(frame);
                 Editor invoker = new Editor();
                 invoker.addCommand(command);
-                invoker.play();
+                try {
+                    invoker.play();
+            } catch (LocationException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
-        
-        WindowAdapter wa = new WindowAdapter() {
 
+        WindowAdapter wa = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);

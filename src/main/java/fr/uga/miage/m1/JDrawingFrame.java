@@ -1,8 +1,5 @@
 package fr.uga.miage.m1;
 
-import fr.uga.miage.m1.commands.Editor;
-import fr.uga.miage.m1.commands.Undo;
-import fr.uga.miage.m1.exceptions.LocationException;
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.Circle;
@@ -21,8 +18,6 @@ import java.util.*;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static java.lang.String.*;
-
 /**
  * This class represents the main application class, which is a JFrame subclass
  * that manages a toolbar of shapes and a drawing canvas.
@@ -31,7 +26,7 @@ import static java.lang.String.*;
  */
 public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionListener {
 
-    private static final Logger logger = Logger.getLogger(JDrawingFrame.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(JDrawingFrame.class.getName());
 
     private enum Shapes {
 
@@ -53,7 +48,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     private final ArrayList<SimpleShape> listShapes = new ArrayList<>();
 
     // Editor to manage commands
-    private Editor editor;
+    //private final transient Editor editor;
 
     /**
      * Tracks buttons to manage the background.
@@ -77,23 +72,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         panel.setFocusable(true);
 
         // Instantiates components to manage commands
-        editor = new Editor();
-        // add listener to the panel
-        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "undo");
-        panel.getActionMap().put("undo", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editor.addCommand(new Undo(listShapes));
-                try {
-                    editor.play();
-                } catch (LocationException ex) {
-                    throw new RuntimeException(ex);
-                }
-                for (SimpleShape shape : listShapes) {
-                    shape.draw((Graphics2D) panel.getGraphics());
-                }
-            }
-        });
+        // editor = new Editor();
 
         label = new JLabel(" ", SwingConstants.CENTER);
         JButton buttonJSON = new JButton("Export JSON", null);
@@ -172,9 +151,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     listShapes.add(s);
                     break;
                 default:
-                    logger.warning("No shape selected");
+                    LOGGER.warning("No shape selected");
             }
-            logger.info("Shape added");
+            LOGGER.info("Shape added");
         }
     }
 
@@ -244,7 +223,21 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         return listShapes;
     }
 
-
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g);
+        Graphics2D g2 = (Graphics2D) this.getGraphics();
+        for (SimpleShape shape : listShapes) {
+            shape.draw(g2);
+        }
+    }
+    public void undo() {
+        LOGGER.info("Undo action (Ctrl Z)");
+        if (!listShapes.isEmpty()) {
+            listShapes.remove(listShapes.size() - 1);
+            this.paintComponents(this.getGraphics());
+        }
+    }
     /**
      * Simple action listener for shape tool bar buttons that sets
      * the drawing frame's currently selected shape when receiving
@@ -319,8 +312,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
             String resultString = res.toString();
 
-            logger.info("*********************** Export JSON ***********************");
-            logger.info(resultString);
+            LOGGER.info("*********************** Export JSON ***********************");
+            LOGGER.info(resultString);
 
             // Call up the recording window
             exportWindow("JSON", resultString);
@@ -363,8 +356,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             // Convertir le StringBuilder en une chaîne
             String resultString = res.toString();
 
-            logger.info("*********************** Export XML ***********************");
-            logger.info(resultString);
+            LOGGER.info("*********************** Export XML ***********************");
+            LOGGER.info(resultString);
 
             // Appeler la fenêtre d'enregistrement
             exportWindow("XML", resultString);
@@ -386,7 +379,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers " + typeFile.toUpperCase() + "(*." + typeFile.toLowerCase() + ")", typeFile.toLowerCase());
                 fileChooser.setFileFilter(filter);
             } catch (Exception e) {
-                logger.warning("Erreur lors de la création du filtre pour les fichiers " + typeFile.toUpperCase() + " : " + e.getMessage());
+                LOGGER.warning("Erreur lors de la création du filtre pour les fichiers " + typeFile.toUpperCase() + " : " + e.getMessage());
             }
 
             int userSelection = fileChooser.showSaveDialog(this);
@@ -401,10 +394,10 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
                     writer.write(content); // Écrire la chaîne dans le fichier sélectionné
                     writer.flush();
-                    logger.fine("Le fichier a été enregistré avec succès");
+                    LOGGER.fine("Le fichier a été enregistré avec succès");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    logger.warning("Erreur lors de l'enregistrement du fichier " + typeFile.toUpperCase() + " : " + e.getMessage());
+                    LOGGER.warning("Erreur lors de l'enregistrement du fichier " + typeFile.toUpperCase() + " : " + e.getMessage());
                 }
             }
 
