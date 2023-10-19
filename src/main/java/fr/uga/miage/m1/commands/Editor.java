@@ -1,7 +1,5 @@
 package fr.uga.miage.m1.commands;
 
-import fr.uga.miage.m1.exceptions.LocationException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,22 +15,11 @@ public class Editor {
         commands.add(command);
     }
 
-    public void play() throws LocationException {
+    public void play() {
         for (Command command : commands) {
-            try {
-                command.execute();
-            }catch (LocationException e){
-                throw new LocationException(e.getMessage());
-            }
+
+            command.execute();
+
         }
-    }
-
-    public void reset() {
-        commands.clear();
-    }
-
-    public void undo() throws LocationException {
-        commands.remove(commands.size() - 1);
-        play();
     }
 }

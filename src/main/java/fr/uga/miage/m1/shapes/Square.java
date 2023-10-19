@@ -63,8 +63,9 @@ public class Square implements SimpleShape, Visitable {
     }
 
     @Override
-    public void accept(Visitor visitor) {
+    public Object accept(Visitor visitor) {
         visitor.visit(this);
+        return null;
     }
 
     @Override

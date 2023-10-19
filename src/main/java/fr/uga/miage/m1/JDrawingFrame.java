@@ -118,6 +118,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     }
 
+
     /**
      * Implements method for the <tt>MouseListener</tt> interface to
      * draw the selected shape into the drawing canvas.
@@ -221,17 +222,25 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void paintComponents(Graphics g) {
         super.paintComponents(g);
         Graphics2D g2 = (Graphics2D) this.getGraphics();
-        for (SimpleShape shape : listShapes) {
+        for (SimpleShape shape : getListShapes()) {
             shape.draw(g2);
         }
     }
-    public void undo() {
+
+
+    // This method is called when the user makes Ctrl z
+    public boolean undo() {
+        boolean undo = false;
         LOGGER.info("Undo action (Ctrl Z)");
         if (!listShapes.isEmpty()) {
             listShapes.remove(listShapes.size() - 1);
             this.paintComponents(this.getGraphics());
+            undo = true;
         }
+        return undo;
     }
+
+
     /**
      * Simple action listener for shape tool bar buttons that sets
      * the drawing frame's currently selected shape when receiving

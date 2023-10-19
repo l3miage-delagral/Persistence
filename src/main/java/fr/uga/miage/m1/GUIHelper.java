@@ -3,7 +3,6 @@ package fr.uga.miage.m1;
 import fr.uga.miage.m1.commands.Command;
 import fr.uga.miage.m1.commands.Editor;
 import fr.uga.miage.m1.commands.Undo;
-import fr.uga.miage.m1.exceptions.LocationException;
 
 import java.awt.event.*;
 import javax.swing.*;
@@ -27,11 +26,8 @@ public class GUIHelper {
                 Command command = new Undo(frame);
                 Editor invoker = new Editor();
                 invoker.addCommand(command);
-                try {
-                    invoker.play();
-            } catch (LocationException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                invoker.play();
+
             }
         });
 

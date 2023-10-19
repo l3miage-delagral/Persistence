@@ -8,7 +8,9 @@ public interface Visitable {
 
     /**
      * Accept a visitor.
+     *
      * @param visitor
+     * @return
      */
-    void accept(Visitor visitor);
+    Object accept(Visitor visitor);
 }
