@@ -35,7 +35,7 @@ import fr.uga.miage.m1.persistence.Visitable;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public class Triangle implements SimpleShape, Visitable {
+class Triangle implements SimpleShape, Visitable {
 
     private final int mx;
 
@@ -84,5 +84,10 @@ public class Triangle implements SimpleShape, Visitable {
     @Override
     public int getY() {
         return this.my;
+    }
+
+    @Override
+    public String getShapeName() {
+        return "triangle";
     }
 }

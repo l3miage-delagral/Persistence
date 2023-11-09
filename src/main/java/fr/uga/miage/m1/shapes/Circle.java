@@ -30,7 +30,7 @@ import fr.uga.miage.m1.persistence.Visitable;
 
 
 
-public class Circle implements SimpleShape, Visitable {
+class Circle implements SimpleShape, Visitable {
 
     private final int mx;
 
@@ -69,5 +69,10 @@ public class Circle implements SimpleShape, Visitable {
 
     public int getY() {
         return my;
+    }
+
+    @Override
+    public String getShapeName() {
+        return "circle";
     }
 }

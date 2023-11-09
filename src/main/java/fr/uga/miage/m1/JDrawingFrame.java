@@ -2,10 +2,7 @@ package fr.uga.miage.m1;
 
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
-import fr.uga.miage.m1.shapes.Circle;
-import fr.uga.miage.m1.shapes.SimpleShape;
-import fr.uga.miage.m1.shapes.Square;
-import fr.uga.miage.m1.shapes.Triangle;
+import fr.uga.miage.m1.shapes.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -28,16 +25,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private static final Logger LOGGER = Logger.getLogger(JDrawingFrame.class.getName());
 
-    private enum Shapes {
-
-        SQUARE, TRIANGLE, CIRCLE
-    }
-
     private static final long serialVersionUID = 1L;
 
     private final JToolBar toolbar;
 
-    private Shapes selected;
+    private ShapeFactory.Shapes selected;
 
     private final JPanel panel;
 
@@ -50,7 +42,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     /**
      * Tracks buttons to manage the background.
      */
-    private final EnumMap<Shapes, JButton> buttons = new EnumMap<>(Shapes.class);
+    private final EnumMap<ShapeFactory.Shapes, JButton> buttons = new EnumMap<>(ShapeFactory.Shapes.class);
 
     /**
      * Default constructor that populates the main window.
@@ -78,9 +70,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
         // Add shapes in the menu
-        addShape(Shapes.SQUARE, new ImageIcon("images/square.png"));
-        addShape(Shapes.TRIANGLE, new ImageIcon("images/triangle.png"));
-        addShape(Shapes.CIRCLE, new ImageIcon("images/circle.png"));
+        addShape(ShapeFactory.Shapes.SQUARE, new ImageIcon("images/square.png"));
+        addShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon("images/triangle.png"));
+        addShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon("images/circle.png"));
         addButton(buttonJSON, null, "JSON");
         addButton(buttonXML, null, "XML");
         setPreferredSize(new Dimension(400, 400));
@@ -92,7 +84,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param name The name of the injected <tt>SimpleShape</tt>.
      * @param icon The icon associated with the injected <tt>SimpleShape</tt>.
      */
-    private void addShape(Shapes name, ImageIcon icon) {
+    private void addShape(ShapeFactory.Shapes name, ImageIcon icon) {
         JButton button = new JButton(icon);
         button.setBorderPainted(false);
         buttons.put(name, button);
@@ -128,27 +120,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void mouseClicked(MouseEvent evt) {
         if (panel.contains(evt.getX(), evt.getY())) {
             Graphics2D g2 = (Graphics2D) panel.getGraphics();
-            switch (selected) {
-                case CIRCLE:
-                    Circle c = new Circle(evt.getX(), evt.getY());
-                    c.draw(g2);
-                    listShapes.add(c);
-                    break;
-                case TRIANGLE:
-                    Triangle t = new Triangle(evt.getX(), evt.getY());
-                    t.draw(g2);
-                    listShapes.add(t);
-                    break;
-                case SQUARE:
-                    new Square(evt.getX(), evt.getY());
-                    Square s = new Square(evt.getX(), evt.getY());
-                    s.draw(g2);
-                    listShapes.add(s);
-                    break;
-                default:
-                    LOGGER.warning("No shape selected");
+
+            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), g2);
+            if (shape == null) {
+                LOGGER.warning("No shape selected");
+            }else {
+                listShapes.add(shape);
+                LOGGER.info("Shape added");
             }
-            LOGGER.info("Shape added");
         }
     }
 
@@ -251,8 +230,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         public void actionPerformed(ActionEvent evt) {
             boolean exportRequested = false; // Indicateur pour vérifier si une action d'exportation a été demandée
             // Itère sur tous les boutons
-            for (Map.Entry<Shapes, JButton> entry : buttons.entrySet()) {
-                Shapes shape = entry.getKey();
+            for (Map.Entry<ShapeFactory.Shapes, JButton> entry : buttons.entrySet()) {
+                ShapeFactory.Shapes shape = entry.getKey();
                 JButton btn = entry.getValue();
                 if (evt.getActionCommand().equals(shape.toString())) {
                     btn.setBorderPainted(true);
@@ -287,27 +266,32 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             res.append("{\n\t\"shapes\" : [\n");
 
             for (SimpleShape shape : listShapes) {
-                if (shape instanceof Circle) {
-                    if (listShapes.indexOf(shape) != 0) {
-                        res.append(",\n");
-                    }
-                    JSonVisitor circleVisit = new JSonVisitor();
-                    ((Circle) shape).accept(circleVisit);
-                    res.append(circleVisit.getRepresentation());
-                } else if (shape instanceof Triangle) {
-                    if (listShapes.indexOf(shape) != 0) {
-                        res.append(",\n");
-                    }
-                    JSonVisitor triangleVisit = new JSonVisitor();
-                    ((Triangle) shape).accept(triangleVisit);
-                    res.append(triangleVisit.getRepresentation());
-                } else if (shape instanceof Square) {
-                    if (listShapes.indexOf(shape) != 0) {
-                        res.append(",\n");
-                    }
-                    JSonVisitor squareVisit = new JSonVisitor();
-                    ((Square) shape).accept(squareVisit);
-                    res.append(squareVisit.getRepresentation());
+                if (listShapes.indexOf(shape) != 0) {
+                    res.append(",\n");
+                }
+
+                switch (shape.getShapeName()) {
+                    case "circle":
+
+                        JSonVisitor circleVisit = new JSonVisitor();
+                        shape.accept(circleVisit);
+                        res.append(circleVisit.getRepresentation());
+                        break;
+
+                    case "triangle":
+                        JSonVisitor triangleVisit = new JSonVisitor();
+                        shape.accept(triangleVisit);
+                        res.append(triangleVisit.getRepresentation());
+                        break;
+
+                    case "square":
+                        JSonVisitor squareVisit = new JSonVisitor();
+                        shape.accept(squareVisit);
+                        res.append(squareVisit.getRepresentation());
+                        break;
+
+                    default:
+                        LOGGER.info("Shape not found in Export JSON");
                 }
             }
 
@@ -333,25 +317,34 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
 
             for (SimpleShape shape : listShapes) {
-                if (shape instanceof Circle) {
-                    XMLVisitor circleVisit = new XMLVisitor();
-                    ((Circle) shape).accept(circleVisit);
-                    res.append(circleVisit.getRepresentation());
-                } else if (shape instanceof Triangle) {
-                    if (listShapes.indexOf(shape) != 0) {
-                        res.append("\n");
-                    }
-                    XMLVisitor triangleVisit = new XMLVisitor();
-                    ((Triangle) shape).accept(triangleVisit);
-                    res.append(triangleVisit.getRepresentation());
-                } else if (shape instanceof Square) {
-                    if (listShapes.indexOf(shape) != 0) {
-                        res.append("\n");
-                    }
-                    XMLVisitor squareVisit = new XMLVisitor();
-                    ((Square) shape).accept(squareVisit);
-                    res.append(squareVisit.getRepresentation());
+                if (listShapes.indexOf(shape) != 0) {
+                    res.append(",\n");
                 }
+
+                switch (shape.getShapeName()) {
+                    case "circle":
+
+                        XMLVisitor circleVisit = new XMLVisitor();
+                        shape.accept(circleVisit);
+                        res.append(circleVisit.getRepresentation());
+                        break;
+
+                    case "triangle":
+                        XMLVisitor triangleVisit = new XMLVisitor();
+                        shape.accept(triangleVisit);
+                        res.append(triangleVisit.getRepresentation());
+                        break;
+
+                    case "square":
+                        XMLVisitor squareVisit = new XMLVisitor();
+                        shape.accept(squareVisit);
+                        res.append(squareVisit.getRepresentation());
+                        break;
+
+                    default:
+                        LOGGER.info("Shape not found in Export JSON");
+                }
+
             }
 
             res.append("\n\t</shapes>\n</root>");

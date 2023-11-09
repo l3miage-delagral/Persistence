@@ -35,7 +35,7 @@ import java.awt.geom.Rectangle2D;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public class Square implements SimpleShape, Visitable {
+class Square implements SimpleShape, Visitable {
 
     private final int mx;
 
@@ -76,5 +76,10 @@ public class Square implements SimpleShape, Visitable {
     @Override
     public int getY() {
         return my;
+    }
+
+    @Override
+    public String getShapeName() {
+        return "square";
     }
 }

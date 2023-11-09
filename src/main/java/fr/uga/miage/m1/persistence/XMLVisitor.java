@@ -1,8 +1,6 @@
 package fr.uga.miage.m1.persistence;
 
-import fr.uga.miage.m1.shapes.Circle;
-import fr.uga.miage.m1.shapes.Square;
-import fr.uga.miage.m1.shapes.Triangle;
+import fr.uga.miage.m1.shapes.SimpleShape;
 
 
 /**
@@ -26,27 +24,11 @@ public class XMLVisitor implements Visitor {
     }
 
     @Override
-    public void visit(Circle circle) {
-        int x = circle.getX();
-        int y = circle.getY();
+    public void visit(SimpleShape shape) {
+        int x = shape.getX();
+        int y = shape.getY();
 
-        this.representation = XML_SHAPE_OPEN + XML_TYPE_OPEN + "circle" + XML_TYPE_END + XML_X_OPEN + x + XML_X_END + XML_Y_OPEN + y + XML_Y_END + XML_SHAPE_END;
-    }
-
-    @Override
-    public void visit(Square square) {
-        int x = square.getX();
-        int y = square.getY();
-
-        this.representation = XML_SHAPE_OPEN + XML_TYPE_OPEN + "square" + XML_TYPE_END + XML_X_OPEN + x + XML_X_END + XML_Y_OPEN + y + XML_Y_END + XML_SHAPE_END;
-    }   
-
-    @Override
-    public void visit(Triangle triangle) {
-        int x = triangle.getX();
-        int y = triangle.getY();
-
-        this.representation = XML_SHAPE_OPEN + XML_TYPE_OPEN + "triangle" + XML_TYPE_END + XML_X_OPEN + x + XML_X_END + XML_Y_OPEN + y + XML_Y_END + XML_SHAPE_END;
+        this.representation = XML_SHAPE_OPEN + XML_TYPE_OPEN + shape.getShapeName() + XML_TYPE_END + XML_X_OPEN + x + XML_X_END + XML_Y_OPEN + y + XML_Y_END + XML_SHAPE_END;
     }
 
     /**

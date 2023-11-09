@@ -1,9 +1,6 @@
 package fr.uga.miage.m1.persistence;
 
-import fr.uga.miage.m1.shapes.Circle;
-import fr.uga.miage.m1.shapes.Square;
-import fr.uga.miage.m1.shapes.Triangle;
-
+import fr.uga.miage.m1.shapes.SimpleShape;
 
 /**
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
@@ -22,29 +19,12 @@ public class JSonVisitor implements Visitor {
 
     public JSonVisitor() { // default implementation ignored
     }
-
     @Override
-    public void visit(Circle circle) {
-        int x = circle.getX();
-        int y = circle.getY();
-        
-        this.representation = JSON_TYPE_OPEN + "\"circle\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y + JSON_END;
-    }
+    public void visit(SimpleShape shape) {
+        int x = shape.getX();
+        int y = shape.getY();
 
-    @Override
-    public void visit(Square square) {
-        int x = square.getX();
-        int y = square.getY();
-
-        this.representation = JSON_TYPE_OPEN + "\"square\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y + JSON_END;
-    }
-
-    @Override
-    public void visit(Triangle triangle) {
-        int x = triangle.getX();
-        int y = triangle.getY();
-
-        this.representation = JSON_TYPE_OPEN + "\"triangle\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y + JSON_END;
+        this.representation = JSON_TYPE_OPEN + "\""+shape.getShapeName()+"\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y + JSON_END;
     }
 
     /**

@@ -1,5 +1,7 @@
 package fr.uga.miage.m1.shapes;
 
+import fr.uga.miage.m1.persistence.Visitable;
+
 import java.awt.Graphics2D;
 
 /**
@@ -8,7 +10,7 @@ import java.awt.Graphics2D;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public interface SimpleShape {
+public interface SimpleShape extends Visitable {
 
     /**
      * Method to draw the shape of the extension.
@@ -19,5 +21,7 @@ public interface SimpleShape {
     int getX();
 
     int getY();
+
+    String getShapeName();
 
 }
