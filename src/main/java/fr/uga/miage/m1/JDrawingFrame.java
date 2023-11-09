@@ -200,7 +200,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     @Override
     public void paintComponents(Graphics g) {
         super.paintComponents(g);
-        Graphics2D g2 = (Graphics2D) this.getGraphics();
+        Graphics2D g2 = (Graphics2D) this.panel.getGraphics();
         for (SimpleShape shape : getListShapes()) {
             shape.draw(g2);
         }

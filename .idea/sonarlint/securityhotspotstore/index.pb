@@ -14,8 +14,6 @@ w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-V
-&src/main/java/fr/uga/miage/m1/App.java,2\e\2e15481bd610f315e43a77edb153f66532873263
 b
 2src/main/java/fr/uga/miage/m1/commands/Editor.java,1\e\1e5b3cfd48ecfe4e8c412d30e8d6c961ce57b96a
 h
@@ -24,8 +22,6 @@ c
 3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
 ]
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
-\
-,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 S

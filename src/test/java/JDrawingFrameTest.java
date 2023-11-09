@@ -29,4 +29,5 @@ class JDrawingFrameTest {
         TestCase.assertEquals(excpectedRes, res);
 
     }
+
 }

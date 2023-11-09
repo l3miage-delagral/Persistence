@@ -11,12 +11,11 @@ public class ShapeFactory {
     private static ShapeFactory instance = null;
 
     private ShapeFactory() {
-        instance = this;
     }
 
     public static ShapeFactory getInstance() {
         if(instance == null) {
-            new ShapeFactory();
+            instance = new ShapeFactory();
         }
 
         return instance;
@@ -39,16 +38,19 @@ public class ShapeFactory {
 
         switch (selected) {
             case CIRCLE:
-                shape = getInstance().createCircle(x, y);
-                shape.draw(g2);
+                Circle c = new Circle(x, y);
+                c.draw(g2);
+                shape = c;
                 break;
             case TRIANGLE:
-                shape = getInstance().createTriangle(x, y);
-                shape.draw(g2);
+                Triangle t = new Triangle(x, y);
+                t.draw(g2);
+                shape = t;
                 break;
             case SQUARE:
-                shape = getInstance().createSquare(x, y);
-                shape.draw(g2);
+                Square s = new Square(x, y);
+                s.draw(g2);
+                shape = s;
                 break;
             default:
                 return null;
