@@ -23,7 +23,7 @@ class JDrawingFrameTest {
     @DisplayName("Test JDrawingFrame undo")
     void testUndoFrame() {
         JDrawingFrame frame = new JDrawingFrame("test");
-        boolean res = frame.undo();
+        boolean res = frame.removeShape();
         boolean excpectedRes = false;
         // verifier que frame a bien été créé
         TestCase.assertEquals(excpectedRes, res);

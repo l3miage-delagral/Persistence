@@ -19,17 +19,7 @@ public class GUIHelper {
     public static void showOnFrame(String frameName) {
         JDrawingFrame frame = new JDrawingFrame(frameName);
 
-        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "undo");
-        frame.getRootPane().getActionMap().put("undo", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Command command = new Undo(frame);
-                Editor invoker = new Editor();
-                invoker.addCommand(command);
-                invoker.play();
-
-            }
-        });
+        frame = addKeyboardListener(frame);
 
         WindowAdapter wa = new WindowAdapter() {
             @Override
@@ -41,4 +31,22 @@ public class GUIHelper {
         frame.pack();
         frame.setVisible(true);
     }
+
+    private static JDrawingFrame addKeyboardListener(JDrawingFrame frame) {
+
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "removeShape");
+        frame.getRootPane().getActionMap().put("removeShape", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Command command = new Undo(frame);
+                Editor invoker = new Editor();
+                invoker.addCommand(command);
+                invoker.play();
+
+            }
+        });
+
+        return frame;
+    }
+
 }

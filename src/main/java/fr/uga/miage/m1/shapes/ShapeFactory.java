@@ -33,24 +33,18 @@ public class ShapeFactory {
         return new Triangle(x, y);
     }
 
-    public SimpleShape createSimpleShape(Shapes selected, int x, int y, Graphics2D g2) {
+    public SimpleShape createSimpleShape(Shapes selected, int x, int y) {
         SimpleShape shape = null;
 
         switch (selected) {
             case CIRCLE:
-                Circle c = new Circle(x, y);
-                c.draw(g2);
-                shape = c;
+                shape = new Circle(x, y);
                 break;
             case TRIANGLE:
-                Triangle t = new Triangle(x, y);
-                t.draw(g2);
-                shape = t;
+                shape = new Triangle(x, y);
                 break;
             case SQUARE:
-                Square s = new Square(x, y);
-                s.draw(g2);
-                shape = s;
+                shape = new Square(x, y);
                 break;
             default:
                 return null;

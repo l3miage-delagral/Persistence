@@ -8,6 +8,6 @@ package fr.uga.miage.m1;
 public class App {
 
     public static void main(String[] args) {
-        GUIHelper.showOnFrame("test");
+        GUIHelper.showOnFrame("Shapes editor");
     }
 }

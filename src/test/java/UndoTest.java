@@ -20,7 +20,7 @@ class UndoTest {
         undo.execute();
 
         // Verify that the undo command has been executed
-        verify(frameMock).undo();
+        verify(frameMock).removeShape();
 
     }
 

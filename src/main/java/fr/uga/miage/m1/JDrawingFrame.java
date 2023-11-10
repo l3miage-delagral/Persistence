@@ -37,7 +37,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient ActionListener reusableActionListener = new ShapeActionListener();
 
-    private final ArrayList<SimpleShape> listShapes = new ArrayList<>();
+    private transient ArrayList<SimpleShape> listShapes = new ArrayList<>();
+
+    private final List<ArrayList<SimpleShape>> listShapesHistory = new ArrayList<>();
 
     /**
      * Tracks buttons to manage the background.
@@ -119,13 +121,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     public void mouseClicked(MouseEvent evt) {
         if (panel.contains(evt.getX(), evt.getY())) {
-            Graphics2D g2 = (Graphics2D) panel.getGraphics();
 
-            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), g2);
+            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY());
             if (shape == null) {
                 LOGGER.warning("No shape selected");
             }else {
+                listShapesHistory.add(new ArrayList<>(listShapes));
                 listShapes.add(shape);
+                this.paintComponents(this.getGraphics());
                 LOGGER.info("Shape added");
             }
         }
@@ -206,15 +209,27 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
     }
 
+    private List<SimpleShape> getLastState() {
+        return listShapesHistory.get(listShapesHistory.size() - 1);
+    }
+
+    public void removeLastState() {
+        listShapesHistory.remove(listShapesHistory.size() - 1);
+    }
 
     // This method is called when the user makes Ctrl z
-    public boolean undo() {
+    public boolean removeShape() {
         boolean undo = false;
-        LOGGER.info("Undo action (Ctrl Z)");
-        if (!listShapes.isEmpty()) {
-            listShapes.remove(listShapes.size() - 1);
+
+        if (!listShapes.isEmpty() && !listShapesHistory.isEmpty()) {
+            listShapes = (ArrayList<SimpleShape>) getLastState();
+            removeLastState();
+
             this.paintComponents(this.getGraphics());
             undo = true;
+            LOGGER.info("Undo action (Ctrl Z)");
+        } else {
+            LOGGER.warning("Empty frame, no more (Ctrl Z)");
         }
         return undo;
     }

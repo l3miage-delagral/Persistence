@@ -14,7 +14,8 @@ public class Undo implements Command {
     @Override
     public void execute () {
         // undo
-        frame.undo();
+        frame.removeShape();
     }
+
 
 }
