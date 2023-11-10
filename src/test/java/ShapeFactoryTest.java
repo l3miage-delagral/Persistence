@@ -17,9 +17,9 @@ class ShapeFactoryTest {
     @DisplayName("create a form")
     void testCreateForm(){
 ShapeFactory shapeFactory = ShapeFactory.getInstance();
-        assertEquals(shapeFactory.createCircle(1, 2).getShapeName(), "circle");
-        assertEquals(shapeFactory.createSquare(1, 2).getShapeName(), "square");
-        assertEquals(shapeFactory.createTriangle(1, 2).getShapeName(), "triangle");
+        assertEquals("circle", shapeFactory.createCircle(1, 2).getShapeName());
+        assertEquals("square", shapeFactory.createSquare(1, 2).getShapeName());
+        assertEquals("triangle", shapeFactory.createTriangle(1, 2).getShapeName());
     }
 
 }
