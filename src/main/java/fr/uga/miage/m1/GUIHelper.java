@@ -19,7 +19,7 @@ public class GUIHelper {
     public static void showOnFrame(String frameName) {
         JDrawingFrame frame = new JDrawingFrame(frameName);
 
-        frame = addKeyboardListener(frame);
+        addKeyboardListener(frame);
 
         WindowAdapter wa = new WindowAdapter() {
             @Override
@@ -32,7 +32,7 @@ public class GUIHelper {
         frame.setVisible(true);
     }
 
-    private static JDrawingFrame addKeyboardListener(JDrawingFrame frame) {
+    private static void addKeyboardListener(JDrawingFrame frame) {
 
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), "removeShape");
         frame.getRootPane().getActionMap().put("removeShape", new AbstractAction() {
@@ -46,7 +46,6 @@ public class GUIHelper {
             }
         });
 
-        return frame;
     }
 
 }

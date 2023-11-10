@@ -1,7 +1,5 @@
 package fr.uga.miage.m1.shapes;
 
-import java.awt.*;
-
 public class ShapeFactory {
     public enum Shapes {
 
