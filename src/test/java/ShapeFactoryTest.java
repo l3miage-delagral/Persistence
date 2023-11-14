@@ -22,4 +22,12 @@ ShapeFactory shapeFactory = ShapeFactory.getInstance();
         assertEquals("triangle", shapeFactory.createTriangle(1, 2).getShapeName());
     }
 
+    @Test
+    @DisplayName("create a form")
+    void testCreateSimpleShape(){
+ShapeFactory shapeFactory = ShapeFactory.getInstance();
+        assertEquals("circle", shapeFactory.createSimpleShape(ShapeFactory.Shapes.CIRCLE, 1, 2).getShapeName());
+        assertEquals("square", shapeFactory.createSimpleShape(ShapeFactory.Shapes.SQUARE, 1, 2).getShapeName());
+        assertEquals("triangle", shapeFactory.createSimpleShape(ShapeFactory.Shapes.TRIANGLE, 1, 2).getShapeName());
+    }
 }

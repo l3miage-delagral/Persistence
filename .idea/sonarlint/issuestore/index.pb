@@ -32,3 +32,17 @@ e
 0src/main/java/fr/uga/miage/m1/shapes/Circle.java,8\2\82d3883aa3fca2a56a9cb617f0fb2c575138aac4
 M
 src/test/java/SquareTest.java,8\9\89c758c660b210ed083019e352acae46ab133572
+j
+:src/main/java/fr/uga/miage/m1/persistence/JSonVisitor.java,a\b\ab527a4fac516e2d9d32bdf04a8ab3f177ec0122
+f
+6src/main/java/fr/uga/miage/m1/persistence/Visitor.java,e\9\e9c77b21c80688aad488d08c2984f46df840a4ba
+O
+src/test/java/TriangleTest.java,8\6\868b12c4c5395e0e46e5bae267ff3b6a813856a3
+`
+0src/main/java/fr/uga/miage/m1/shapes/Square.java,0\2\02b6cc968e52f13e74944c5a9db15a4de6282f00
+M
+src/test/java/EditorTest.java,1\a\1a10466daadabcad32f7084d2b92ed8b7a1677e8
+K
+src/test/java/UndoTest.java,3\9\39e3dd48d11f38e2a50b91ca7462887b31cd1f8f
+T
+$src/test/java/JDrawingFrameTest.java,0\c\0cfe2e0d17516957c7d2f22c13a627ad22e2da35
