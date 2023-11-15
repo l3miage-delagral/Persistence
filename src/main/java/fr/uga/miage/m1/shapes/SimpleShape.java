@@ -24,4 +24,11 @@ public interface SimpleShape extends Visitable {
 
     String getShapeName();
 
+    ShapeFactory.Shapes getShapeType();
+
+    boolean contains(int x, int y);
+
+    void move(int x, int y);
+
+
 }

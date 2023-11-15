@@ -32,9 +32,11 @@ import fr.uga.miage.m1.persistence.Visitable;
 
 class Circle implements SimpleShape, Visitable {
 
-    private final int mx;
+    private int mx;
 
-    private final int my;
+    private int my;
+
+    private Ellipse2D circle;
 
     public Circle(int x, int y) {
         mx = x - 25;
@@ -50,7 +52,8 @@ class Circle implements SimpleShape, Visitable {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(mx, my, Color.RED, (float)mx + 50, my, Color.WHITE);
         g2.setPaint(gradient);
-        g2.fill(new Ellipse2D.Double(mx, my, 50, 50));
+        circle = new Ellipse2D.Double(mx, my, 50, 50);
+        g2.fill(circle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
         g2.setColor(Color.black);
         g2.setStroke(wideStroke);
@@ -75,4 +78,21 @@ class Circle implements SimpleShape, Visitable {
     public String getShapeName() {
         return "circle";
     }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return circle.contains(x, y);
+    }
+
+    @Override
+    public void move(int dx, int dy) {
+        this.mx = dx - 25;
+        this.my = dy - 25;
+    }
+
+    @Override
+    public ShapeFactory.Shapes getShapeType(){
+        return ShapeFactory.Shapes.CIRCLE;
+    }
+
 }

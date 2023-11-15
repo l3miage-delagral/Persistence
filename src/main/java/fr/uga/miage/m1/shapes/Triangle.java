@@ -18,11 +18,7 @@
  */
 package fr.uga.miage.m1.shapes;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 
@@ -37,9 +33,11 @@ import fr.uga.miage.m1.persistence.Visitable;
  */
 class Triangle implements SimpleShape, Visitable {
 
-    private final int mx;
+    private int mx;
 
-    private final int my;
+    private int my;
+
+    private Polygon polyg;
 
     public Triangle(int x, int y) {
         mx = x - 25;
@@ -57,6 +55,7 @@ class Triangle implements SimpleShape, Visitable {
         g2.setPaint(gradient);
         int[] xcoords = { mx + 25, mx, mx + 50 };
         int[] ycoords = {my, my + 50, my + 50 };
+        polyg = new Polygon(xcoords, ycoords, 3);
         GeneralPath polygon = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
         polygon.moveTo((float)mx + 25, my);
         for (int i = 0; i < xcoords.length; i++) {
@@ -90,4 +89,21 @@ class Triangle implements SimpleShape, Visitable {
     public String getShapeName() {
         return "triangle";
     }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return polyg.contains(x, y);
+    }
+
+    @Override
+    public void move(int x, int y) {
+        this.mx = x-25;
+        this.my = y-25;
+    }
+
+    @Override
+    public ShapeFactory.Shapes getShapeType() {
+        return ShapeFactory.Shapes.TRIANGLE;
+    }
+
 }

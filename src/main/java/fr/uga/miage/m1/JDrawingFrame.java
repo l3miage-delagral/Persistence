@@ -21,8 +21,9 @@ import java.util.logging.Logger;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionListener {
+public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionListener{
 
+    private static final String URL = "src/main/java/fr/uga/miage/m1";
     private static final Logger LOGGER = Logger.getLogger(JDrawingFrame.class.getName());
 
     private static final long serialVersionUID = 1L;
@@ -37,9 +38,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient ActionListener reusableActionListener = new ShapeActionListener();
 
-    private transient ArrayList<SimpleShape> listShapes = new ArrayList<>();
+    private transient List<SimpleShape> listShapes = new ArrayList<>();
 
-    private final List<ArrayList<SimpleShape>> listShapesHistory = new ArrayList<>();
+    private final List<List<SimpleShape>> listShapesHistory = new LinkedList<>();
+
+    private transient SimpleShape selectedShape = null;
+
+
+    private final List<SimpleShape> selectedShapeList = new ArrayList<>();
 
     /**
      * Tracks buttons to manage the background.
@@ -72,11 +78,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
         // Add shapes in the menu
-        addShape(ShapeFactory.Shapes.SQUARE, new ImageIcon("images/square.png"));
-        addShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon("images/triangle.png"));
-        addShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon("images/circle.png"));
-        addButton(buttonJSON, null, "JSON");
-        addButton(buttonXML, null, "XML");
+        addShape(ShapeFactory.Shapes.SQUARE, new ImageIcon(URL + "/resources/images/square.png"));
+        addShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon(URL + "/resources/images/triangle.png"));
+        addShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon(URL + "/resources/images/circle.png"));
+        addButton(buttonJSON, "JSON");
+        addButton(buttonXML,"XML");
         setPreferredSize(new Dimension(400, 400));
     }
 
@@ -100,9 +106,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         repaint();
     }
 
-    private void addButton(JButton button, ImageIcon icon, String typeFile) {
+    private void addButton(JButton button, String typeFile) {
         button.setBorderPainted(false);
-        button.setIcon(icon);
         toolbar.add(button);
         toolbar.validate();
         repaint();
@@ -120,18 +125,26 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param evt The associated mouse event.
      */
     public void mouseClicked(MouseEvent evt) {
-        if (panel.contains(evt.getX(), evt.getY())) {
 
-            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY());
-            if (shape == null) {
+        for (SimpleShape shape : listShapes) {
+            if (shape.contains(evt.getX(), evt.getY())) {
+                LOGGER.info("No more shape added");
+                return;
+            }
+        }
+
+        if(panel.contains(evt.getX(), evt.getY())) {
+             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY());
+             if (shape == null) {
                 LOGGER.warning("No shape selected");
-            }else {
+             } else {
                 listShapesHistory.add(new ArrayList<>(listShapes));
                 listShapes.add(shape);
                 this.paintComponents(this.getGraphics());
                 LOGGER.info("Shape added");
-            }
+             }
         }
+
     }
 
 
@@ -140,7 +153,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      *
      * @param evt The associated mouse event.
      */
-    public void mouseEntered(MouseEvent evt) { // default implementation ignored
+    public void mouseEntered(MouseEvent evt) {
+
     }
 
     /**
@@ -159,7 +173,28 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      *
      * @param evt The associated mouse event.
      */
-    public void mousePressed(MouseEvent evt) { // default implementation ignored
+    public void mousePressed(MouseEvent evt) {
+        if (evt.isControlDown()) {
+            LOGGER.info("Control pressed");
+            return ;
+        }
+        int compteur = 0;
+        for(SimpleShape shape : listShapes) {
+            if (shape.contains(evt.getX(), evt.getY())) {
+                SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX() + 25, shape.getY() + 25);
+                List<SimpleShape> listCopy = new ArrayList<>(listShapes);
+                listCopy.remove(shape);
+                listCopy.add(shapeCopy);
+                listShapesHistory.add(listCopy);
+                this.selectedShape = shape;
+                compteur++;
+
+                break;
+            }
+        }
+        if (compteur == 0) {
+            this.selectedShape = null;
+        }
     }
 
 
@@ -167,8 +202,16 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * Implements method for the <tt>MouseListener</tt> interface to complete
      * shape dragging.
      */
-    public void mouseReleased(MouseEvent e) { // default implementation ignored
+    public void mouseReleased(MouseEvent e) {
+        if (selectedShape != null) {
+
+            selectedShape.move(e.getX(), e.getY());
+            this.paintComponents(this.getGraphics());
+
+            selectedShape = null;
+        }
     }
+
 
     public void componentResized(MouseEvent e) { // default implementation ignored
     }
@@ -179,7 +222,13 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      *
      * @param evt The associated mouse event.
      */
-    public void mouseDragged(MouseEvent evt) { // default implementation ignored
+    public void mouseDragged(MouseEvent evt) {
+        if (selectedShape != null) {
+            selectedShape.move(evt.getX(), evt.getY());
+            selectedShape.draw((Graphics2D) panel.getGraphics());
+        }
+
+
     }
 
     /**
@@ -216,6 +265,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void removeLastState() {
         listShapesHistory.remove(listShapesHistory.size() - 1);
     }
+
 
     // This method is called when the user makes Ctrl z
     public boolean removeShape() {

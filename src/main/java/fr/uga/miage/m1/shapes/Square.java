@@ -37,9 +37,10 @@ import java.awt.geom.Rectangle2D;
  */
 class Square implements SimpleShape, Visitable {
 
-    private final int mx;
+    private int mx;
 
-    private final int my;
+    private int my;
+    private Rectangle2D square;
 
     public Square(int x, int y) {
         mx = x - 25;
@@ -55,7 +56,8 @@ class Square implements SimpleShape, Visitable {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(mx, my, Color.BLUE, (float)mx + 50, my, Color.WHITE);
         g2.setPaint(gradient);
-        g2.fill(new Rectangle2D.Double(mx, my, 50, 50));
+        square = new Rectangle2D.Double(mx, my, 50, 50);
+        g2.fill(square);
         BasicStroke wideStroke = new BasicStroke(2.0f);
         g2.setColor(Color.black);
         g2.setStroke(wideStroke);
@@ -82,4 +84,21 @@ class Square implements SimpleShape, Visitable {
     public String getShapeName() {
         return "square";
     }
+
+    @Override
+    public boolean contains(int x, int y) {
+        return square.contains(x, y);
+    }
+
+    @Override
+    public void move(int x, int y) {
+        this.mx = x - 25;
+        this.my = y - 25;
+    }
+
+    @Override
+    public ShapeFactory.Shapes getShapeType() {
+        return ShapeFactory.Shapes.SQUARE;
+    }
+
 }
