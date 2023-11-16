@@ -6,4 +6,6 @@ public interface Command{
     // execute the command
     void execute();// implemented by children
 
+    void undo();
+
 }

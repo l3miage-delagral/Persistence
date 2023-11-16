@@ -24,8 +24,6 @@ M
 src/test/java/SquareTest.java,8\9\89c758c660b210ed083019e352acae46ab133572
 j
 :src/main/java/fr/uga/miage/m1/persistence/JSonVisitor.java,a\b\ab527a4fac516e2d9d32bdf04a8ab3f177ec0122
-M
-src/test/java/EditorTest.java,1\a\1a10466daadabcad32f7084d2b92ed8b7a1677e8
 f
 6src/main/java/fr/uga/miage/m1/persistence/Visitor.java,e\9\e9c77b21c80688aad488d08c2984f46df840a4ba
 O
@@ -40,15 +38,9 @@ $src/test/java/JDrawingFrameTest.java,0\c\0cfe2e0d17516957c7d2f22c13a627ad22e2d
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 V
 &src/main/java/fr/uga/miage/m1/App.java,2\e\2e15481bd610f315e43a77edb153f66532873263
-b
-2src/main/java/fr/uga/miage/m1/commands/Editor.java,1\e\1e5b3cfd48ecfe4e8c412d30e8d6c961ce57b96a
-`
-0src/main/java/fr/uga/miage/m1/commands/Undo.java,7\6\7679610b3eff64576813bfbd699d1909e612ee9c
-c
-3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
 `
 0src/main/java/fr/uga/miage/m1/shapes/Square.java,0\2\02b6cc968e52f13e74944c5a9db15a4de6282f00
 b
 2src/main/java/fr/uga/miage/m1/shapes/Triangle.java,2\4\240b86d4fb1c470cd0651f4a09814d2d9f2e91f2
-`
-0src/main/java/fr/uga/miage/m1/shapes/Circle.java,8\2\82d3883aa3fca2a56a9cb617f0fb2c575138aac4
+e
+5src/main/java/fr/uga/miage/m1/shapes/SimpleShape.java,0\3\03ceeaf8ec975e68ef0401fabd9e197937c176ef
