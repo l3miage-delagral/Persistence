@@ -39,9 +39,14 @@ class Triangle implements SimpleShape, Visitable {
 
     private Polygon polyg;
 
+    private Color color = Color.BLACK;
+
     public Triangle(int x, int y) {
         mx = x - 25;
         my = y - 25;
+        int[] xcoords = { mx + 25, mx, mx + 50 };
+        int[] ycoords = {my, my + 50, my + 50 };
+        polyg = new Polygon(xcoords, ycoords, 3);
     }
 
     /**
@@ -64,7 +69,7 @@ class Triangle implements SimpleShape, Visitable {
         polygon.closePath();
         g2.fill(polygon);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(color);
         g2.setStroke(wideStroke);
         g2.draw(polygon);
     }
@@ -86,6 +91,11 @@ class Triangle implements SimpleShape, Visitable {
     }
 
     @Override
+    public int getZ() {
+        return 0;
+    }
+
+    @Override
     public String getShapeName() {
         return "triangle";
     }
@@ -99,6 +109,11 @@ class Triangle implements SimpleShape, Visitable {
     public void move(int x, int y) {
         this.mx = x-25;
         this.my = y-25;
+    }
+
+    @Override
+    public void selected() {
+        color =  Color.green;
     }
 
     @Override

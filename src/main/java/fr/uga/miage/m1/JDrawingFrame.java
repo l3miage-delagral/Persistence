@@ -2,6 +2,7 @@ package fr.uga.miage.m1;
 
 import fr.uga.miage.m1.commands.AddShape;
 import fr.uga.miage.m1.commands.Editor;
+import fr.uga.miage.m1.commands.MoveShape;
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.*;
@@ -56,6 +57,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private boolean isClicked;
 
+    private boolean isDragged = false;
+
+    private int startingDragX;
+    private int startingDragY;
+
 
     /**
      * Tracks buttons to manage the background.
@@ -92,6 +98,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         addButtonShape(ShapeFactory.Shapes.SQUARE, new ImageIcon(URL + "/resources/images/square.png"));
         addButtonShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon(URL + "/resources/images/triangle.png"));
         addButtonShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon(URL + "/resources/images/circle.png"));
+        addButtonShape(ShapeFactory.Shapes.CUBE, new ImageIcon(URL + "/resources/images/underc.png"));
         addButton(buttonJSON, "JSON");
         addButton(buttonXML,"XML");
         setPreferredSize(new Dimension(400, 400));
@@ -155,7 +162,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
 
         if(panel.contains(evt.getX(), evt.getY())) {
-             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY());
+             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
              if (shape == null) {
                 LOGGER.warning("No shape selected");
              } else {
@@ -203,15 +210,48 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param evt The associated mouse event.
      */
     public void mousePressed(MouseEvent evt) {
-
+        if (listShapes.isEmpty()) {
+            return;
+        }
         for (SimpleShape shape : listShapes) {
-            if (shape.contains(evt.getX(), evt.getY()) && !selectedShapeList.contains(shape)) {
+            if (shape.contains(evt.getX(), evt.getY()) && !startingShapeList.contains(shape)) {
                 startingShapeList.add(shape);
-                selectedShapeList.add(ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX(), shape.getY()));
+                SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX(), shape.getY(), 0);
+                selectedShapeList.add(shapeCopy);
+                shape.selected();
+                shape.draw((Graphics2D) panel.getGraphics());
                 LOGGER.info("Shape selected");
             }
+            startingDragX = evt.getX();
+            startingDragY = evt.getY();
             isClicked = false;
         }
+
+    }
+
+    /**
+     * Implements method for the <tt>MouseMotionListener</tt> interface to
+     * move a dragged shape.
+     *
+     * @param evt The associated mouse event.
+     */
+    public void mouseDragged(MouseEvent evt) {
+
+        if (!selectedShapeList.isEmpty()) {
+            int compteur = 0;
+            for (SimpleShape shape : selectedShapeList) {
+                SimpleShape startShape = startingShapeList.get(compteur);
+
+                int deltaX = evt.getX() - startingDragX + 25;
+                int deltaY = evt.getY() - startingDragY + 25;
+                shape.selected();
+                shape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
+                shape.draw((Graphics2D) panel.getGraphics());
+                compteur++;
+            }
+            isDragged = true;
+        }
+
 
     }
 
@@ -224,63 +264,56 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         if(isClicked) {
             startingShapeList.clear();
             selectedShapeList.clear();
-            isClicked = false;
+            isClicked = true;
             return;
         }
-        if (!selectedShapeList.isEmpty()) {
+        if (!selectedShapeList.isEmpty() && isDragged) {
+            int compteur = 0;
             for (SimpleShape startShape : startingShapeList) {
+                SimpleShape selectShape = selectedShapeList.get(compteur);
 
-                for (SimpleShape selectShape : selectedShapeList) {
-
-
-                    if (startShape.contains(e.getX(), e.getY())) {
-                        startingShapeList.clear();
-                        selectedShapeList.clear();
-                        return;
-                    }
-
-                    selectShape.move(e.getX(), e.getY());
-                    //paintComponents(this.getGraphics());
-
-                    SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(selectShape.getShapeType(), selectShape.getX() + 25, selectShape.getY() + 25);
-                    List<SimpleShape> listShapesCopy = new ArrayList<>(listShapes);
-                    listShapes.remove(startShape);
-                    listShapesHistory.add(listShapesCopy);
-                    listShapes.add(shapeCopy);
+                if (startShape.contains(e.getX(), e.getY()) && selectShape.contains(e.getX(), e.getY())) {
+                    return;
                 }
+                int deltaX = e.getX() - startingDragX + 50;
+                int deltaY = e.getY() - startingDragY + 50;
+
+                selectShape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
+
+                editor.addCommand(new MoveShape(this, startShape, selectShape));
+                editor.play();
+                compteur++;
             }
 
-            //this.paintComponents(this.getGraphics());
             startingShapeList.clear();
             selectedShapeList.clear();
+
+            isDragged = false;
+            this.paintComponents(this.getGraphics());
+
 
         }
     }
 
-    public void move() {
+    public void cancelMove() {
+        listShapes = listShapesHistory.get(listShapesHistory.size() - 1);
+        listShapesHistory.remove(listShapesHistory.size() - 1);
+        this.paintComponents(this.getGraphics());
+    }
+    public void move(SimpleShape startShape, SimpleShape selectShape) {
+        SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(selectShape.getShapeType(), selectShape.getX(), selectShape.getY(), 0);
+        List<SimpleShape> listShapesCopy = new ArrayList<>(listShapes);
+        listShapes.remove(startShape);
+        listShapesHistory.add(listShapesCopy);
 
+        listShapes.add(shapeCopy);
+        this.paintComponents(this.getGraphics());
     }
 
 
     public void componentResized(MouseEvent e) { // default implementation ignored
     }
 
-    /**
-     * Implements method for the <tt>MouseMotionListener</tt> interface to
-     * move a dragged shape.
-     *
-     * @param evt The associated mouse event.
-     */
-    public void mouseDragged(MouseEvent evt) {
-        if (!selectedShapeList.isEmpty()) {
-            for (SimpleShape shape : selectedShapeList) {
-                shape.move(evt.getX(), evt.getY());
-                //shape.draw((Graphics2D) panel.getGraphics());
-            }
-        }
-
-
-    }
 
     /**
      * Implements an empty method for the <tt>MouseMotionListener</tt>
@@ -309,23 +342,13 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
     }
 
-    private List<SimpleShape> getLastState() {
-        return listShapesHistory.get(listShapesHistory.size() - 1);
-    }
-
-    public void removeLastState() {
-        listShapesHistory.remove(listShapesHistory.size() - 1);
-    }
-
-
     // This method is called when the user makes Ctrl z
     public boolean removeShape() {
         boolean undo = false;
 
         if (!listShapes.isEmpty() && !listShapesHistory.isEmpty()) {
-            listShapes = (ArrayList<SimpleShape>) getLastState();
-            removeLastState();
-
+            listShapes = listShapesHistory.get(listShapesHistory.size() - 1);
+            listShapesHistory.remove(listShapesHistory.size() - 1);
             this.paintComponents(this.getGraphics());
             undo = true;
             LOGGER.info("Undo action (Ctrl Z)");
@@ -406,6 +429,12 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                         res.append(squareVisit.getRepresentation());
                         break;
 
+                    case "cube":
+                        JSonVisitor cubeVisit = new JSonVisitor();
+                        shape.accept(cubeVisit);
+                        res.append(cubeVisit.getRepresentation());
+                        break;
+
                     default:
                         LOGGER.info("Shape not found in Export JSON");
                 }
@@ -455,6 +484,12 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                         XMLVisitor squareVisit = new XMLVisitor();
                         shape.accept(squareVisit);
                         res.append(squareVisit.getRepresentation());
+                        break;
+
+                    case "cube":
+                        XMLVisitor cubeVisit = new XMLVisitor();
+                        shape.accept(cubeVisit);
+                        res.append(cubeVisit.getRepresentation());
                         break;
 
                     default:
