@@ -44,8 +44,6 @@ S
 #src/test/java/ShapeFactoryTest.java,1\b\1bc12387dc8110da4a09db1e2d2e6d00e647a16e
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-f
-6src/main/java/fr/uga/miage/m1/shapes/ShapeFactory.java,3\4\34dbf2b6b84d42fdce55caaf93222b4408eb4e55
 d
 4src/main/java/fr/uga/miage/m1/commands/AddShape.java,e\1\e1f2ed2b734d23b81e68b99d62d305637f321deb
 e
