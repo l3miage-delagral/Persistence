@@ -2,7 +2,7 @@ package fr.uga.miage.m1.shapes;
 
 import fr.uga.miage.m1.persistence.Visitable;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 /**
  * This interface defines the <tt>SimpleShape</tt> extension. This extension
@@ -22,6 +22,8 @@ public interface SimpleShape extends Visitable {
 
     int getY();
 
+    int getZ();
+
     String getShapeName();
 
     ShapeFactory.Shapes getShapeType();
@@ -29,6 +31,8 @@ public interface SimpleShape extends Visitable {
     boolean contains(int x, int y);
 
     void move(int x, int y);
+
+    void selected();
 
 
 }

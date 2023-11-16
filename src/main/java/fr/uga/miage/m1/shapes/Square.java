@@ -42,9 +42,12 @@ class Square implements SimpleShape, Visitable {
     private int my;
     private Rectangle2D square;
 
+    private Color color = Color.BLACK;
+
     public Square(int x, int y) {
         mx = x - 25;
         my = y - 25;
+        square = new Rectangle2D.Double(mx, my, 50, 50);
     }
 
     /**
@@ -59,7 +62,7 @@ class Square implements SimpleShape, Visitable {
         square = new Rectangle2D.Double(mx, my, 50, 50);
         g2.fill(square);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(color);
         g2.setStroke(wideStroke);
         g2.draw(new Rectangle2D.Double(mx, my, 50, 50));
     }
@@ -81,6 +84,11 @@ class Square implements SimpleShape, Visitable {
     }
 
     @Override
+    public int getZ() {
+        return 0;
+    }
+
+    @Override
     public String getShapeName() {
         return "square";
     }
@@ -94,6 +102,11 @@ class Square implements SimpleShape, Visitable {
     public void move(int x, int y) {
         this.mx = x - 25;
         this.my = y - 25;
+    }
+
+    @Override
+    public void selected() {
+        this.color = Color.green;
     }
 
     @Override

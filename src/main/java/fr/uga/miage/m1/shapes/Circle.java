@@ -38,9 +38,12 @@ class Circle implements SimpleShape, Visitable {
 
     private Ellipse2D circle;
 
+    private Color color = Color.BLACK;
+
     public Circle(int x, int y) {
         mx = x - 25;
         my = y - 25;
+        circle = new Ellipse2D.Double(mx, my, 50, 50);
     }
 
     /**
@@ -55,7 +58,7 @@ class Circle implements SimpleShape, Visitable {
         circle = new Ellipse2D.Double(mx, my, 50, 50);
         g2.fill(circle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(color);
         g2.setStroke(wideStroke);
         g2.draw(new Ellipse2D.Double(mx, my, 50, 50));
     }
@@ -75,6 +78,11 @@ class Circle implements SimpleShape, Visitable {
     }
 
     @Override
+    public int getZ() {
+        return 0;
+    }
+
+    @Override
     public String getShapeName() {
         return "circle";
     }
@@ -88,6 +96,12 @@ class Circle implements SimpleShape, Visitable {
     public void move(int dx, int dy) {
         this.mx = dx - 25;
         this.my = dy - 25;
+        circle = new Ellipse2D.Double(mx, my, 50, 50);
+    }
+
+    @Override
+    public void selected() {
+       this.color = Color.green;
     }
 
     @Override

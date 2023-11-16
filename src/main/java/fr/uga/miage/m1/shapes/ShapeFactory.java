@@ -1,9 +1,12 @@
 package fr.uga.miage.m1.shapes;
 
+
+import edu.uga.singleshape.CubePanel;
+
 public class ShapeFactory {
     public enum Shapes {
 
-        SQUARE, TRIANGLE, CIRCLE
+        SQUARE, TRIANGLE, CIRCLE, CUBE
     }
 
     private static ShapeFactory instance = null;
@@ -31,7 +34,7 @@ public class ShapeFactory {
         return new Triangle(x, y);
     }
 
-    public SimpleShape createSimpleShape(Shapes selected, int x, int y) {
+    public SimpleShape createSimpleShape(Shapes selected, int x, int y, int z) {
         SimpleShape shape = null;
 
         switch (selected) {
@@ -43,6 +46,9 @@ public class ShapeFactory {
                 break;
             case SQUARE:
                 shape = new Square(x, y);
+                break;
+            case CUBE:
+                shape = new Cube(x, y, z);
                 break;
             default:
                 return null;

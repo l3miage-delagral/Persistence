@@ -28,19 +28,25 @@ f
 6src/main/java/fr/uga/miage/m1/persistence/Visitor.java,e\9\e9c77b21c80688aad488d08c2984f46df840a4ba
 O
 src/test/java/TriangleTest.java,8\6\868b12c4c5395e0e46e5bae267ff3b6a813856a3
-K
-src/test/java/UndoTest.java,3\9\39e3dd48d11f38e2a50b91ca7462887b31cd1f8f
 T
 $src/test/java/JDrawingFrameTest.java,0\c\0cfe2e0d17516957c7d2f22c13a627ad22e2da35
-9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 V
 &src/main/java/fr/uga/miage/m1/App.java,2\e\2e15481bd610f315e43a77edb153f66532873263
-`
-0src/main/java/fr/uga/miage/m1/shapes/Square.java,0\2\02b6cc968e52f13e74944c5a9db15a4de6282f00
-b
-2src/main/java/fr/uga/miage/m1/shapes/Triangle.java,2\4\240b86d4fb1c470cd0651f4a09814d2d9f2e91f2
+\
+,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
+c
+3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
+M
+src/test/java/EditorTest.java,1\a\1a10466daadabcad32f7084d2b92ed8b7a1677e8
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+S
+#src/test/java/ShapeFactoryTest.java,1\b\1bc12387dc8110da4a09db1e2d2e6d00e647a16e
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+f
+6src/main/java/fr/uga/miage/m1/shapes/ShapeFactory.java,3\4\34dbf2b6b84d42fdce55caaf93222b4408eb4e55
+d
+4src/main/java/fr/uga/miage/m1/commands/AddShape.java,e\1\e1f2ed2b734d23b81e68b99d62d305637f321deb
 e
-5src/main/java/fr/uga/miage/m1/shapes/SimpleShape.java,0\3\03ceeaf8ec975e68ef0401fabd9e197937c176ef
+5src/main/java/fr/uga/miage/m1/commands/MoveShape.java,3\8\380ed53f7c0cc55bd31eeac07fbc74d848898013
