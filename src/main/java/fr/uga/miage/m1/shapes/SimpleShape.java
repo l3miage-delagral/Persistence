@@ -32,7 +32,6 @@ public interface SimpleShape extends Visitable {
 
     void move(int x, int y);
 
-    void selected();
-
+    void selected(boolean selected);
 
 }

@@ -68,7 +68,7 @@ public class Cube implements SimpleShape {
     }
 
     @Override
-    public void selected() {
-        // not yet
+    public void selected(boolean selected ) {
+        // not yet implemented
     }
 }

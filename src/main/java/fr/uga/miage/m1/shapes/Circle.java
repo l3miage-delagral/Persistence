@@ -100,8 +100,12 @@ class Circle implements SimpleShape, Visitable {
     }
 
     @Override
-    public void selected() {
-       this.color = Color.green;
+    public void selected(boolean selected ) {
+        if (selected) {
+            color = Color.green;
+        } else {
+            color = Color.BLACK;
+        }
     }
 
     @Override

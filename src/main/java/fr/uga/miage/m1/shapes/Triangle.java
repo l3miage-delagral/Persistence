@@ -112,9 +112,14 @@ class Triangle implements SimpleShape, Visitable {
     }
 
     @Override
-    public void selected() {
-        color =  Color.green;
+    public void selected(boolean selected ) {
+        if (selected) {
+            color = Color.green;
+        } else {
+            color = Color.BLACK;
+        }
     }
+
 
     @Override
     public ShapeFactory.Shapes getShapeType() {
