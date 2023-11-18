@@ -1,27 +1,31 @@
 # Persistence
 
-``This is an application for editing geometric shapes.
-It allows you to place geometric shapes on a canva.``
+``Application pour editer des formes géométriques.
+Permettant de placer des formes géométriques dans un panel.``
 
 # Prerequisites
-``To use this application, you must have installed Java 8 or higher.``
-``You must also have installed Maven.``
+``Pour utiliser cette applcation, vous devez avoir installé :``
+*``Java 8 ou plus.``
+*``Vous devez avoir aussi installé Maven.``
 
 # Presentation
-``The application uses the Visitor design pattern for saving and loading geometric shapes.``
-``It also uses the Command design pattern for undoing and repeating actions.``
-``you can have more information on design pattern on this website : https://sourcemaking.com/design_patterns``
+``L'application utilise le patron visiteur pour sauvegarder et charger des formes géométiques.``
+`` Utilise aussi le patron Commande pour .``
+``plus d'informations que les patrons sur le site suivant : https://sourcemaking.com/design_patterns``
 
 ## Functionalities
-* ``place geometric shapes on a canva.``
-* ``save geometric shapes in an XML or JSON file.``
-* ``undo and redo actions.``
-
-# Usage
-``To use the application, simply launch the application's main and follow the instructions.``
+* ``Placer des formes géométriques dans un panel.``
+* ``Sauvegarder/Exporter les formes dans un fichier au format XML ou JSON.``
+* ``CTRL + Z (annuler) sur des actions effectuées.``
+* ``Ajouter des formes géométriques dans un groupe.``
+* ``Déplacer un groupe de formes dans le panel.``
+  
 
 # Installation
-``To install the application, simply clone the project and import it into an IDE such as Eclipse.``
+``Pour installer l'application, un simple clone du projet et l'importer dans un IDE (comme Eclipse,InteliJ...).``
 
-# Authors
-``This application was made by: Lucas Giry and Alex Delagrange``
+# Utilisation
+``Pour utiliser l'application, Lancer le main de l'application et suivre les instructons.``
+
+# Auteurs
+``Lucas GIRY & Alex DELAGRANGE``
