@@ -1,3 +1,4 @@
+import fr.uga.miage.m1.commands.AddShape;
 import fr.uga.miage.m1.commands.Editor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,18 +8,20 @@ import static org.mockito.Mockito.verify;
 
 class EditorTest {
 
-    //@Mock
-    //private Undo commandMock;
+    @Mock
+    private AddShape commandMock;
 
     // test de la classe editor
     @Test
     @DisplayName("Test Editor")
     void testEditor() {
-        //commandMock = mock(Undo.class);
+        commandMock = mock(AddShape.class);
         Editor editor = new Editor();
-        //editor.addCommand(commandMock);
+        editor.addCommand(commandMock);
         editor.play();
-        // Verify that the undo command has been executed
-        //verify(commandMock).execute();
+        // Verify that the AddShape command has been executed
+        verify(commandMock).execute();
+
+        verify(commandMock).equals(editor.getLastCommand());
     }
 }
