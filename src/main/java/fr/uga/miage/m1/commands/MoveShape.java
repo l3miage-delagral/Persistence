@@ -2,6 +2,7 @@ package fr.uga.miage.m1.commands;
 
 import fr.uga.miage.m1.JDrawingFrame;
 import fr.uga.miage.m1.shapes.Group;
+import fr.uga.miage.m1.shapes.ShapeFactory;
 import fr.uga.miage.m1.shapes.SimpleShape;
 
 import java.util.ArrayList;
@@ -41,14 +42,15 @@ public class MoveShape implements Command{
             if(compteur >= selectedGroup.getListGroup().size()){
                 break;
             }
-
             SimpleShape selectShape = selectedGroup.getListGroup().get(compteur);
 
             if (startShape.contains(evtX, evtY) && selectShape.contains(evtX, evtY)) {
                 return;
             }
-
-            selectShape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
+            jf.removeShape(selectShape);
+            selectedGroup.add(compteur,selectShape);
+            selectedGroup.moveThis(selectShape, startShape.getX() + deltaX, startShape.getY() + deltaY);
+            jf.addShape(selectedGroup.getListGroup().get(compteur));
 
             compteur++;
         }
@@ -68,9 +70,8 @@ public class MoveShape implements Command{
 
             jf.removeShape(selectShape);
 
-
             selectShape.move(startShape.getX() +25, startShape.getY() + 25);
-
+            selectShape.selected(true);
             jf.addShape(selectShape);
 
         }

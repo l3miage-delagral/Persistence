@@ -1,5 +1,6 @@
 package fr.uga.miage.m1.shapes;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,14 @@ public class Group {
         shape.selected(true);
     }
 
+    public void add(int index, SimpleShape shape) {
+        groupList.add(index, shape);
+        shape.selected(true);
+    }
+
     public boolean isInGroup(SimpleShape shape) {
         for (SimpleShape shapeInGroup : groupList) {
-            if (shape.contains(shapeInGroup.getX(), shapeInGroup.getY())) {
+            if (shapeInGroup.equals(shape)) {
                 return true;
             }
         }
@@ -40,4 +46,22 @@ public class Group {
         groupList.clear();
     }
 
+    public void delete() {
+        // not implemented yet
+    }
+
+    public boolean containsInStarting(SimpleShape shape) {
+        for (SimpleShape shapeInGroup : groupList) {
+            if (shapeInGroup.contains(shape.getX(), shape.getY())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void moveThis(SimpleShape selectShape, int x, int y) {
+        if(selectShape != null) {
+            selectShape.move(x, y);
+        }
+    }
 }
