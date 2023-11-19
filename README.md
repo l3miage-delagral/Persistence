@@ -1,31 +1,39 @@
 # Persistence
 
-``Application pour editer des formes géométriques.
-Permettant de placer des formes géométriques dans un panel.``
+``Ce projet est une éditeur de dessin en Java.``
+``Il permet de placer des formes géométriques dans un panel, de les sauvegarder et de les exporter dans un fichier.``
 
-# Prerequisites
+
+# Prérequis
 ``Pour utiliser cette applcation, vous devez avoir installé :``
-*``Java 8 ou plus.``
-*``Vous devez avoir aussi installé Maven.``
+* ``Java 8 ou supérieur.``
+* ``Maven 3.6.3 ou supérieur.``
 
-# Presentation
-``L'application utilise le patron visiteur pour sauvegarder et charger des formes géométiques.``
-`` Utilise aussi le patron Commande pour .``
-``plus d'informations que les patrons sur le site suivant : https://sourcemaking.com/design_patterns``
 
-## Functionalities
+# Installation
+``Pour installer l'application, un simple clone du projet et l'importer dans un IDE (comme Eclipse,InteliJ...).``
+``Ensuite, il faut lancer le main de l'application qui se trouve dans App.java.``
+
+
+## Fonctionnalités
 * ``Placer des formes géométriques dans un panel.``
 * ``Sauvegarder/Exporter les formes dans un fichier au format XML ou JSON.``
 * ``CTRL + Z (annuler) sur des actions effectuées.``
 * ``Ajouter des formes géométriques dans un groupe.``
 * ``Déplacer un groupe de formes dans le panel.``
-  
 
-# Installation
-``Pour installer l'application, un simple clone du projet et l'importer dans un IDE (comme Eclipse,InteliJ...).``
 
-# Utilisation
-``Pour utiliser l'application, Lancer le main de l'application et suivre les instructons.``
+# Itérations
+``Les documents de conception se trouvent dans le dossier conception/IT2.``
+
+``La première itération du projet à ajouté les fonctionnalités suivantes :``
+* ``Placer des formes géométriques dans un panel.``
+* ``Sauvegarder/Exporter les formes dans un fichier au format XML ou JSON.``
+
+``La deuxième itération du projet à ajouté les fonctionnalités suivantes :``
+* ``CTRL + Z (annuler) sur des actions effectuées.``
+* ``Ajouter des formes géométriques dans un groupe.``
+* ``Déplacer un groupe de formes dans le panel.``
 
 # Auteurs
 ``Lucas GIRY & Alex DELAGRANGE``

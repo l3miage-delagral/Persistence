@@ -12,8 +12,6 @@ S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 O
 src/test/java/TriangleTest.java,8\6\868b12c4c5395e0e46e5bae267ff3b6a813856a3
-V
-&src/main/java/fr/uga/miage/m1/App.java,2\e\2e15481bd610f315e43a77edb153f66532873263
 \
 ,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
 7
