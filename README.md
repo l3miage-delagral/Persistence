@@ -1,12 +1,12 @@
 # Persistence
 
-``Application pour editer des formes géométriques.
+``Application pour éditer des formes géométriques.
 Permettant de placer des formes géométriques dans un panel.``
 
 # Prerequisites
 ``Pour utiliser cette applcation, vous devez avoir installé :``
-*``Java 8 ou plus.``
-*``Vous devez avoir aussi installé Maven.``
+`` - Java 8 ou plus.``
+`` - Vous devez avoir aussi installé Maven.``
 
 # Presentation
 ``L'application utilise le patron visiteur pour sauvegarder et charger des formes géométiques.``
