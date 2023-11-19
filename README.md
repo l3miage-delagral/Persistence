@@ -8,6 +8,12 @@ Permettant de placer des formes géométriques dans un panel.``
 `` - Java 8 ou plus.``
 `` - Vous devez avoir aussi installé Maven.``
 
+# Installation
+``Pour installer l'application, un simple clone du projet et l'importer dans un IDE (comme Eclipse,InteliJ...).``
+
+# Utilisation
+``Pour utiliser l'application, Lancer le main de l'application et suivre les instructons.``
+
 # Presentation
 ``L'application utilise le patron visiteur pour sauvegarder et charger des formes géométiques.``
 `` Utilise aussi le patron Commande pour .``
@@ -19,13 +25,6 @@ Permettant de placer des formes géométriques dans un panel.``
 * ``CTRL + Z (annuler) sur des actions effectuées.``
 * ``Ajouter des formes géométriques dans un groupe.``
 * ``Déplacer un groupe de formes dans le panel.``
-  
-
-# Installation
-``Pour installer l'application, un simple clone du projet et l'importer dans un IDE (comme Eclipse,InteliJ...).``
-
-# Utilisation
-``Pour utiliser l'application, Lancer le main de l'application et suivre les instructons.``
 
 # Auteurs
 ``Lucas GIRY & Alex DELAGRANGE``
