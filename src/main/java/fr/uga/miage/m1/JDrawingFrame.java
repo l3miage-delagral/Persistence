@@ -223,12 +223,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     if (!selectedGroup.isInGroup(shape)) {
                         selectedGroup.add(shape);
                     } else if (selectedGroup.isInGroup(shape)) {
-                        startingShapeList.clear();
-                        for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
-
-                            startingShapeList.add(ShapeFactory.getInstance().createSimpleShape(shapeInGroup.getShapeType(), shapeInGroup.getX() + 25, shapeInGroup.getY() + 25, 0));
-
-                        }
+                        majStartingShapeList();
                         startingDragX = evt.getX();
                         startingDragY = evt.getY();
                         isClicked = false;
@@ -249,7 +244,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         LOGGER.info("Shape selected");
     }
 
+    private void majStartingShapeList() {
+        startingShapeList.clear();
+        for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
 
+            startingShapeList.add(ShapeFactory.getInstance().createSimpleShape(shapeInGroup.getShapeType(), shapeInGroup.getX() + 25, shapeInGroup.getY() + 25, 0));
+
+        }
+    }
 
 
     /**
@@ -277,8 +279,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
             isDragged = true;
         }
-
-
     }
 
 

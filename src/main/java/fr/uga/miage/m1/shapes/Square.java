@@ -74,13 +74,13 @@ class Square implements SimpleShape, Visitable {
     }
 
     @Override
-    public int getX() {
-        return mx;
+    public int getY() {
+        return my;
     }
 
     @Override
-    public int getY() {
-        return my;
+    public int getX() {
+        return mx;
     }
 
     @Override
@@ -89,20 +89,16 @@ class Square implements SimpleShape, Visitable {
     }
 
     @Override
-    public String getShapeName() {
-        return "square";
-    }
-
-    @Override
     public boolean contains(int x, int y) {
         return rectangle.contains(x, y);
     }
 
     @Override
-    public void move(int x, int y) {
-        this.mx = x - 25;
-        this.my = y - 25;
+    public String getShapeName() {
+        return "square";
     }
+
+
 
     @Override
     public void selected(boolean selected ) {
@@ -111,6 +107,12 @@ class Square implements SimpleShape, Visitable {
         } else {
             color = Color.BLACK;
         }
+    }
+
+    @Override
+    public void move(int x, int y) {
+        this.mx = x - 25;
+        this.my = y - 25;
     }
 
     @Override

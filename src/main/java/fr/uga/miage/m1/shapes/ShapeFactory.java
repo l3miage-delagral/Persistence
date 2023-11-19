@@ -32,6 +32,7 @@ public class ShapeFactory {
         return new Triangle(x, y);
     }
 
+
     public SimpleShape createSimpleShape(Shapes selected, int x, int y, int z) {
         SimpleShape shape = null;
 

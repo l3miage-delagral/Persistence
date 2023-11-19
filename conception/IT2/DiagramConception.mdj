@@ -1408,7 +1408,7 @@
 							},
 							"font": "Arial;15;0",
 							"left": 360,
-							"top": 104,
+							"top": 136,
 							"width": 369,
 							"height": 38,
 							"text": "Diagramme de classes pour le patron Command IT2"
@@ -2752,6 +2752,28 @@
 							"subViews": [
 								{
 									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGL6HSbLNYzIPk=",
+									"_parent": {
+										"$ref": "AAAAAAGL50h1TABUZ5s="
+									},
+									"model": {
+										"$ref": "AAAAAAGLM2SUykG6VQU="
+									},
+									"font": "Arial;13;0",
+									"left": 128,
+									"top": 515,
+									"width": 36.84814453125,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGL50h1TABUZ5s="
+									},
+									"edgePosition": 1,
+									"text": "-editor"
+								},
+								{
+									"_type": "EdgeLabelView",
 									"_id": "AAAAAAGL50h1TABWNTI=",
 									"_parent": {
 										"$ref": "AAAAAAGL50h1TABUZ5s="
@@ -2957,6 +2979,9 @@
 							},
 							"points": "146:390;146:536;288:536",
 							"showVisibility": true,
+							"nameLabel": {
+								"$ref": "AAAAAAGL6HSbLNYzIPk="
+							},
 							"stereotypeLabel": {
 								"$ref": "AAAAAAGL50h1TABWNTI="
 							},
@@ -2999,6 +3024,28 @@
 								"$ref": "AAAAAAGL50mRzhh7TEM="
 							},
 							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGL6HSbLtZM+bw=",
+									"_parent": {
+										"$ref": "AAAAAAGL50mRzhh/1EA="
+									},
+									"model": {
+										"$ref": "AAAAAAGL50mRzhh8G68="
+									},
+									"font": "Arial;13;0",
+									"left": 165,
+									"top": 409,
+									"width": 37.55908203125,
+									"height": 13,
+									"alpha": 0.5235987755982988,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGL50mRzhh/1EA="
+									},
+									"edgePosition": 2,
+									"text": "-frame"
+								},
 								{
 									"_type": "EdgeLabelView",
 									"_id": "AAAAAAGL50mRzhiAsZ0=",
@@ -3214,6 +3261,9 @@
 								"$ref": "AAAAAAGL50mRzhiCd5Y="
 							},
 							"showEndOrder": "hide",
+							"tailRoleNameLabel": {
+								"$ref": "AAAAAAGL6HSbLtZM+bw="
+							},
 							"tailPropertyLabel": {
 								"$ref": "AAAAAAGL50mRzhiEpP8="
 							},
@@ -7098,7 +7148,8 @@
 					"_parent": {
 						"$ref": "AAAAAAGLM2vleXtcgk4="
 					},
-					"name": "Role1"
+					"name": "Role1",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -7133,7 +7184,8 @@
 					"_parent": {
 						"$ref": "AAAAAAGLM2vleXtcgk4="
 					},
-					"name": "Role5"
+					"name": "Role5",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -7186,7 +7238,8 @@
 					"_parent": {
 						"$ref": "AAAAAAGLM2vleXtcgk4="
 					},
-					"name": "Role11"
+					"name": "Role11",
+					"type": ""
 				},
 				{
 					"_type": "UMLAttribute",
@@ -7221,7 +7274,8 @@
 					"_parent": {
 						"$ref": "AAAAAAGLM2vleXtcgk4="
 					},
-					"name": "Role15"
+					"name": "Role15",
+					"type": ""
 				}
 			]
 		},
@@ -9213,7 +9267,7 @@
 							"top": 72,
 							"width": 409,
 							"height": 57,
-							"text": "Draigramme surt le patron Factory implémenté pour la création des formes. On ne représente que les informations nécessaires."
+							"text": "Draigramme sur le patron Factory implémenté pour la création des formes."
 						},
 						{
 							"_type": "UMLGeneralizationView",
@@ -9494,7 +9548,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL51/F6qxRJ04="
 									},
-									"name": "Shapes selected"
+									"name": "Shapes selected",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9502,7 +9557,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL51/F6qxRJ04="
 									},
-									"name": "int x"
+									"name": "int x",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9510,7 +9566,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL51/F6qxRJ04="
 									},
-									"name": "int y"
+									"name": "int y",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9518,7 +9575,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL51/F6qxRJ04="
 									},
-									"name": "int z"
+									"name": "int z",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9545,7 +9603,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL53hDJbAJf1Q="
 									},
-									"name": "int x"
+									"name": "int x",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9553,7 +9612,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL53hDJbAJf1Q="
 									},
-									"name": "int y"
+									"name": "int y",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9738,7 +9798,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL52dpAKytTn8="
 									},
-									"name": "int x"
+									"name": "int x",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -9746,7 +9807,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL52dpAKytTn8="
 									},
-									"name": "int y"
+									"name": "int y",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -10075,7 +10137,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL53Ivlq9iDYc="
 									},
-									"name": "int x"
+									"name": "int x",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -10083,7 +10146,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGL53Ivlq9iDYc="
 									},
-									"name": "int y"
+									"name": "int y",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",

@@ -23,8 +23,13 @@ public class JSonVisitor implements Visitor {
     public void visit(SimpleShape shape) {
         int x = shape.getX();
         int y = shape.getY();
+        int z = shape.getZ();
 
-        this.representation = JSON_TYPE_OPEN + "\""+shape.getShapeName()+"\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y + JSON_END;
+        this.representation = JSON_TYPE_OPEN + "\""+shape.getShapeName()+"\"" + JSON_X_OPEN + x + JSON_Y_OPEN + y;
+        if(z != 0) {
+            this.representation += ",\n\t\t\"z\": " + z;
+        }
+        this.representation += JSON_END;
     }
 
     /**

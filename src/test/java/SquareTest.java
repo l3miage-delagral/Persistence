@@ -1,6 +1,7 @@
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.ShapeFactory;
+import fr.uga.miage.m1.shapes.SimpleShape;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -8,7 +9,7 @@ import org.mockito.Mockito;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -65,4 +66,22 @@ class SquareTest {
         // pareil pour draw
         verify(graphics).draw(Mockito.any());
     }
+
+    @Test
+    @DisplayName("Test move a square")
+    void testMoveSquare() {
+        SimpleShape square = ShapeFactory.getInstance().createSquare(X, Y);
+        square.move(10, 10);
+        assertEquals(-15, square.getX());
+        assertEquals(-15, square.getY());
+    }
+
+    @Test
+    @DisplayName("Test contains a square")
+    void testContainsSquare() {
+        SimpleShape square = ShapeFactory.getInstance().createSquare(X, Y);
+        assertTrue(square.contains(0, 0));
+        assertFalse(square.contains(100, 100));
+    }
+
 }
