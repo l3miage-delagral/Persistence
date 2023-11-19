@@ -40,14 +40,14 @@ class Square implements SimpleShape, Visitable {
     private int mx;
 
     private int my;
-    private Rectangle2D square;
+    private Rectangle2D rectangle;
 
     private Color color = Color.BLACK;
 
     public Square(int x, int y) {
         mx = x - 25;
         my = y - 25;
-        square = new Rectangle2D.Double(mx, my, 50, 50);
+        rectangle = new Rectangle2D.Double(mx, my, 50, 50);
     }
 
     /**
@@ -59,8 +59,8 @@ class Square implements SimpleShape, Visitable {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(mx, my, Color.BLUE, (float)mx + 50, my, Color.WHITE);
         g2.setPaint(gradient);
-        square = new Rectangle2D.Double(mx, my, 50, 50);
-        g2.fill(square);
+        rectangle = new Rectangle2D.Double(mx, my, 50, 50);
+        g2.fill(rectangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
         g2.setColor(color);
         g2.setStroke(wideStroke);
@@ -74,13 +74,13 @@ class Square implements SimpleShape, Visitable {
     }
 
     @Override
-    public int getX() {
-        return mx;
+    public int getY() {
+        return my;
     }
 
     @Override
-    public int getY() {
-        return my;
+    public int getX() {
+        return mx;
     }
 
     @Override
@@ -89,24 +89,30 @@ class Square implements SimpleShape, Visitable {
     }
 
     @Override
+    public boolean contains(int x, int y) {
+        return rectangle.contains(x, y);
+    }
+
+    @Override
     public String getShapeName() {
         return "square";
     }
 
+
+
     @Override
-    public boolean contains(int x, int y) {
-        return square.contains(x, y);
+    public void selected(boolean selected ) {
+        if (selected) {
+            color = Color.green;
+        } else {
+            color = Color.BLACK;
+        }
     }
 
     @Override
     public void move(int x, int y) {
         this.mx = x - 25;
         this.my = y - 25;
-    }
-
-    @Override
-    public void selected() {
-        this.color = Color.green;
     }
 
     @Override

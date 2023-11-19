@@ -1,6 +1,8 @@
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.ShapeFactory;
+import fr.uga.miage.m1.shapes.SimpleShape;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mock;
@@ -68,6 +70,23 @@ class CircleTest {
         verify(graphics).setColor(Color.black);
         // pareil pour draw
         verify(graphics).draw(Mockito.any());
+    }
+
+    @Test
+    @DisplayName("Test move a Circle")
+    void testMoveCircle() {
+        SimpleShape circle = ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.CIRCLE,X, Y, 0);
+        circle.move(10, 10);
+        Assertions.assertEquals(-15, circle.getX());
+        Assertions.assertEquals(-15, circle.getY());
+    }
+
+    @Test
+    @DisplayName("Test contains a Circle")
+    void testContainsCircle() {
+        SimpleShape circle = ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.CIRCLE,X, Y, 0);
+        Assertions.assertTrue(circle.contains(0, 0));
+        Assertions.assertFalse(circle.contains(100, 100));
     }
 
 }

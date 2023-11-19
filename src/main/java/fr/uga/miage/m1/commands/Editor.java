@@ -7,7 +7,7 @@ public class Editor {
 
     protected List<Command> commands;
 
-    private List<Command> history;
+    private final List<Command> history;
 
     public Editor() { // empty constructor
 
@@ -28,6 +28,10 @@ public class Editor {
     }
 
     public Command getLastCommand() {
-        return history.get(history.size()-1);
+        if(history.isEmpty()) return null;
+
+        Command c = history.get(history.size()-1);
+        history.remove(c);
+        return c;
     }
 }

@@ -8,7 +8,7 @@ import java.awt.*;
 public class Cube implements SimpleShape {
     private int x;
     private int y;
-    private int z;
+    private final int z;
 
     private final CubePanel cubePanel;
 
@@ -68,7 +68,7 @@ public class Cube implements SimpleShape {
     }
 
     @Override
-    public void selected() {
-        // not yet
+    public void selected(boolean selected ) {
+        // not yet implemented
     }
 }

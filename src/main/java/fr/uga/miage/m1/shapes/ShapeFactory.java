@@ -1,8 +1,6 @@
 package fr.uga.miage.m1.shapes;
 
 
-import edu.uga.singleshape.CubePanel;
-
 public class ShapeFactory {
     public enum Shapes {
 
@@ -33,6 +31,7 @@ public class ShapeFactory {
     public SimpleShape createTriangle(int x, int y) {
         return new Triangle(x, y);
     }
+
 
     public SimpleShape createSimpleShape(Shapes selected, int x, int y, int z) {
         SimpleShape shape = null;

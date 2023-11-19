@@ -1,6 +1,7 @@
 package fr.uga.miage.m1;
 
 import fr.uga.miage.m1.commands.AddShape;
+import fr.uga.miage.m1.commands.Command;
 import fr.uga.miage.m1.commands.Editor;
 import fr.uga.miage.m1.commands.MoveShape;
 import fr.uga.miage.m1.persistence.JSonVisitor;
@@ -41,17 +42,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient ActionListener reusableActionListener = new ShapeActionListener();
 
-    private transient List<SimpleShape> listShapes = new ArrayList<>();
-
-    private final List<List<SimpleShape>> listShapesHistory = new LinkedList<>();
-
-    private transient SimpleShape selectedShape = null;
-
-    private transient SimpleShape startingShape = null;
-
-    private final List<SimpleShape> selectedShapeList = new ArrayList<>();
+    private final transient List<SimpleShape> listShapes = new ArrayList<>();
 
     private final List<SimpleShape> startingShapeList = new ArrayList<>();
+
+    private transient Group selectedGroup = null;
 
     private final transient Editor editor;
 
@@ -109,7 +104,13 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         panel.getRootPane().getActionMap().put("undo", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                editor.getLastCommand().undo();
+                Command c = editor.getLastCommand();
+                if (c != null) {
+                    c.undo();
+                } else {
+                    LOGGER.info("Can't undo");
+                }
+
             }
         });
     }
@@ -176,7 +177,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
     public void addShape(SimpleShape shape){
-        listShapesHistory.add(new ArrayList<>(listShapes));
         listShapes.add(shape);
         shape.draw((Graphics2D) this.panel.getGraphics());
         LOGGER.info(shape.getShapeName() + " drawn" );
@@ -190,7 +190,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param evt The associated mouse event.
      */
     public void mouseEntered(MouseEvent evt) {
-
+        // not implemented
     }
 
     /**
@@ -213,21 +213,46 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         if (listShapes.isEmpty()) {
             return;
         }
-        for (SimpleShape shape : listShapes) {
-            if (shape.contains(evt.getX(), evt.getY()) && !startingShapeList.contains(shape)) {
-                startingShapeList.add(shape);
-                SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX(), shape.getY(), 0);
-                selectedShapeList.add(shapeCopy);
-                shape.selected();
-                shape.draw((Graphics2D) panel.getGraphics());
-                LOGGER.info("Shape selected");
-            }
-            startingDragX = evt.getX();
-            startingDragY = evt.getY();
-            isClicked = false;
-        }
 
+        for (SimpleShape shape : listShapes) {
+            SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX() + 25, shape.getY() + 25, 0);
+
+            if (shape.contains(evt.getX(), evt.getY())){
+
+                if (selectedGroup != null){
+                    if (!selectedGroup.isInGroup(shape)) {
+                        selectedGroup.add(shape);
+                    } else if (selectedGroup.isInGroup(shape)) {
+                        majStartingShapeList();
+                        startingDragX = evt.getX();
+                        startingDragY = evt.getY();
+                        isClicked = false;
+                        return;
+                    }
+                } else {
+                    this.selectedGroup = new Group();
+                    selectedGroup.add(shape);
+                }
+                startingShapeList.add(shapeCopy);
+                shape.draw((Graphics2D) panel.getGraphics());
+
+                startingDragX = evt.getX();
+                startingDragY = evt.getY();
+                isClicked = false;
+            }
+        }
+        LOGGER.info("Shape selected");
     }
+
+    private void majStartingShapeList() {
+        startingShapeList.clear();
+        for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+
+            startingShapeList.add(ShapeFactory.getInstance().createSimpleShape(shapeInGroup.getShapeType(), shapeInGroup.getX() + 25, shapeInGroup.getY() + 25, 0));
+
+        }
+    }
+
 
     /**
      * Implements method for the <tt>MouseMotionListener</tt> interface to
@@ -237,22 +262,23 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     public void mouseDragged(MouseEvent evt) {
 
-        if (!selectedShapeList.isEmpty()) {
+        if (selectedGroup != null) {
             int compteur = 0;
-            for (SimpleShape shape : selectedShapeList) {
+            for (SimpleShape shape : selectedGroup.getListGroup()) {
+                if (startingShapeList.size() <= compteur) {
+                    return;
+                }
                 SimpleShape startShape = startingShapeList.get(compteur);
 
                 int deltaX = evt.getX() - startingDragX + 25;
                 int deltaY = evt.getY() - startingDragY + 25;
-                shape.selected();
+                shape.selected(true);
                 shape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
                 shape.draw((Graphics2D) panel.getGraphics());
                 compteur++;
             }
             isDragged = true;
         }
-
-
     }
 
 
@@ -262,52 +288,23 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     public void mouseReleased(MouseEvent e) {
         if(isClicked) {
-            startingShapeList.clear();
-            selectedShapeList.clear();
-            isClicked = true;
             return;
         }
-        if (!selectedShapeList.isEmpty() && isDragged) {
-            int compteur = 0;
-            for (SimpleShape startShape : startingShapeList) {
-                SimpleShape selectShape = selectedShapeList.get(compteur);
+        if (selectedGroup != null && isDragged) {
 
-                if (startShape.contains(e.getX(), e.getY()) && selectShape.contains(e.getX(), e.getY())) {
-                    return;
-                }
-                int deltaX = e.getX() - startingDragX + 50;
-                int deltaY = e.getY() - startingDragY + 50;
+            int deltaX = e.getX() - startingDragX + 25;
+            int deltaY = e.getY() - startingDragY + 25;
 
-                selectShape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
+            MoveShape moveShape = new MoveShape(this, startingShapeList, selectedGroup,deltaX, deltaY, e.getX(), e.getY());
 
-                editor.addCommand(new MoveShape(this, startShape, selectShape));
-                editor.play();
-                compteur++;
-            }
+            editor.addCommand(moveShape);
+            editor.play();
 
             startingShapeList.clear();
-            selectedShapeList.clear();
 
             isDragged = false;
-            this.paintComponents(this.getGraphics());
-
 
         }
-    }
-
-    public void cancelMove() {
-        listShapes = listShapesHistory.get(listShapesHistory.size() - 1);
-        listShapesHistory.remove(listShapesHistory.size() - 1);
-        this.paintComponents(this.getGraphics());
-    }
-    public void move(SimpleShape startShape, SimpleShape selectShape) {
-        SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(selectShape.getShapeType(), selectShape.getX(), selectShape.getY(), 0);
-        List<SimpleShape> listShapesCopy = new ArrayList<>(listShapes);
-        listShapes.remove(startShape);
-        listShapesHistory.add(listShapesCopy);
-
-        listShapes.add(shapeCopy);
-        this.paintComponents(this.getGraphics());
     }
 
 
@@ -343,19 +340,17 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
     // This method is called when the user makes Ctrl z
-    public boolean removeShape() {
-        boolean undo = false;
-
-        if (!listShapes.isEmpty() && !listShapesHistory.isEmpty()) {
-            listShapes = listShapesHistory.get(listShapesHistory.size() - 1);
-            listShapesHistory.remove(listShapesHistory.size() - 1);
-            this.paintComponents(this.getGraphics());
-            undo = true;
-            LOGGER.info("Undo action (Ctrl Z)");
-        } else {
-            LOGGER.warning("Empty frame, no more (Ctrl Z)");
+    public void removeShape(SimpleShape shape) {
+        if (listShapes.isEmpty()){
+            LOGGER.info("Canvas is empty");
+            return;
         }
-        return undo;
+        LOGGER.info("Shape removed");
+        listShapes.remove(shape);
+        if (selectedGroup != null && selectedGroup.isInGroup(shape)) {
+            selectedGroup.remove(shape);
+        }
+        this.paintComponents(this.getGraphics());
     }
 
 
@@ -401,42 +396,36 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
          */
         private void exportJSON() {
             StringBuilder res = new StringBuilder();
+            boolean startedGroup = false;
 
             res.append("{\n\t\"shapes\" : [\n");
 
             for (SimpleShape shape : listShapes) {
-                if (listShapes.indexOf(shape) != 0) {
+                if (listShapes.indexOf(shape) != listShapes.size() - 1) {
                     res.append(",\n");
                 }
 
-                switch (shape.getShapeName()) {
-                    case "circle":
+                if(selectedGroup.isInGroup(shape) && !startedGroup){
+                    startedGroup = true;
+                    res.append("\t\t{\n\t\t\t\"group\" : [\n");
 
-                        JSonVisitor circleVisit = new JSonVisitor();
-                        shape.accept(circleVisit);
-                        res.append(circleVisit.getRepresentation());
-                        break;
+                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                        shapeInGroup.accept(new JSonVisitor());
+                        JSonVisitor visitor = new JSonVisitor();
+                        shapeInGroup.accept(visitor);
+                        res.append(visitor.getRepresentation());
+                        res.append(",\n");
+                    }
 
-                    case "triangle":
-                        JSonVisitor triangleVisit = new JSonVisitor();
-                        shape.accept(triangleVisit);
-                        res.append(triangleVisit.getRepresentation());
-                        break;
 
-                    case "square":
-                        JSonVisitor squareVisit = new JSonVisitor();
-                        shape.accept(squareVisit);
-                        res.append(squareVisit.getRepresentation());
-                        break;
+                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
+                    startedGroup = false;
+                    res.append("\n\t\t\t]\n\t\t}");
 
-                    case "cube":
-                        JSonVisitor cubeVisit = new JSonVisitor();
-                        shape.accept(cubeVisit);
-                        res.append(cubeVisit.getRepresentation());
-                        break;
-
-                    default:
-                        LOGGER.info("Shape not found in Export JSON");
+                } else {
+                    JSonVisitor visitor = new JSonVisitor();
+                    shape.accept(visitor);
+                    res.append(visitor.getRepresentation());
                 }
             }
 
@@ -458,42 +447,31 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
          */
         private void exportXML() {
             StringBuilder res = new StringBuilder();
-
+            boolean startedGroup = false;
             res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
 
             for (SimpleShape shape : listShapes) {
-                if (listShapes.indexOf(shape) != 0) {
-                    res.append(",\n");
-                }
 
-                switch (shape.getShapeName()) {
-                    case "circle":
+                if(selectedGroup.isInGroup(shape) && !startedGroup){
+                    startedGroup = true;
+                    res.append("\n\t\t<group>\n");
 
-                        XMLVisitor circleVisit = new XMLVisitor();
-                        shape.accept(circleVisit);
-                        res.append(circleVisit.getRepresentation());
-                        break;
+                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                        shapeInGroup.accept(new XMLVisitor());
+                        XMLVisitor visitor = new XMLVisitor();
+                        shapeInGroup.accept(visitor);
+                        res.append(visitor.getRepresentation());
+                        res.append("\n");
+                    }
 
-                    case "triangle":
-                        XMLVisitor triangleVisit = new XMLVisitor();
-                        shape.accept(triangleVisit);
-                        res.append(triangleVisit.getRepresentation());
-                        break;
+                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
+                    startedGroup = false;
+                    res.append("\n\t\t</group>\n");
 
-                    case "square":
-                        XMLVisitor squareVisit = new XMLVisitor();
-                        shape.accept(squareVisit);
-                        res.append(squareVisit.getRepresentation());
-                        break;
-
-                    case "cube":
-                        XMLVisitor cubeVisit = new XMLVisitor();
-                        shape.accept(cubeVisit);
-                        res.append(cubeVisit.getRepresentation());
-                        break;
-
-                    default:
-                        LOGGER.info("Shape not found in Export JSON");
+                } else {
+                    XMLVisitor visitor = new XMLVisitor();
+                    shape.accept(visitor);
+                    res.append(visitor.getRepresentation());
                 }
 
             }

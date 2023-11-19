@@ -1,6 +1,9 @@
 import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.ShapeFactory;
+import fr.uga.miage.m1.shapes.SimpleShape;
+import net.bytebuddy.build.Plugin;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -40,10 +43,11 @@ class TriangleTest {
     void testCircleXML() {
 
         XMLVisitor xml = new XMLVisitor();;
-        ShapeFactory.getInstance().createTriangle(X, Y).accept(xml);
-        String excpectedRes = "\t\t<shape>\n\t\t\t<type>triangle</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>";
+        SimpleShape triangle = ShapeFactory.getInstance().createTriangle(X, Y);
+        triangle.accept(xml);
+        String excpectedRes = "\t\t<shape>\n\t\t\t<type>" + triangle.getShapeName() + "</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>";
 
-        assertEquals(excpectedRes, xml.getRepresentation());
+        Assertions.assertEquals(excpectedRes, xml.getRepresentation());
     }
 
 
@@ -67,5 +71,22 @@ class TriangleTest {
         verify(graphics).setColor(Color.black);
         // pareil pour draw
         verify(graphics).draw(Mockito.any());
+    }
+
+    @Test
+    @DisplayName("Test move a triangle")
+    void testMoveTriangle() {
+        SimpleShape triangle = ShapeFactory.getInstance().createTriangle(X, Y);
+        triangle.move(10, 10);
+        Assertions.assertEquals( -15, triangle.getX());
+        Assertions.assertEquals(-15, triangle.getY());
+    }
+
+    @Test
+    @DisplayName("Test contains in triangle")
+    void testContainsTriangle() {
+        SimpleShape triangle = ShapeFactory.getInstance().createTriangle(X, Y);
+        Assertions.assertTrue(triangle.contains(1, 2));
+        Assertions.assertFalse(triangle.contains(100, 100));
     }
 }
