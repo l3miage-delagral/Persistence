@@ -37,7 +37,7 @@ class Triangle implements SimpleShape, Visitable {
 
     private int my;
 
-    private Polygon polyg;
+    private Polygon poly;
 
     private Color color = Color.BLACK;
 
@@ -46,7 +46,7 @@ class Triangle implements SimpleShape, Visitable {
         my = y - 25;
         int[] xcoords = { mx + 25, mx, mx + 50 };
         int[] ycoords = {my, my + 50, my + 50 };
-        polyg = new Polygon(xcoords, ycoords, 3);
+        poly = new Polygon(xcoords, ycoords, 3);
     }
 
     /**
@@ -60,7 +60,7 @@ class Triangle implements SimpleShape, Visitable {
         g2.setPaint(gradient);
         int[] xcoords = { mx + 25, mx, mx + 50 };
         int[] ycoords = {my, my + 50, my + 50 };
-        polyg = new Polygon(xcoords, ycoords, 3);
+        poly = new Polygon(xcoords, ycoords, 3);
         GeneralPath polygon = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
         polygon.moveTo((float)mx + 25, my);
         for (int i = 0; i < xcoords.length; i++) {
@@ -102,7 +102,7 @@ class Triangle implements SimpleShape, Visitable {
 
     @Override
     public boolean contains(int x, int y) {
-        return polyg.contains(x, y);
+        return poly.contains(x, y);
     }
 
     @Override

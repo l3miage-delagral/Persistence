@@ -36,14 +36,14 @@ class Circle implements SimpleShape, Visitable {
 
     private int my;
 
-    private Ellipse2D circle;
+    private Ellipse2D ellipse;
 
     private Color color = Color.BLACK;
 
     public Circle(int x, int y) {
         mx = x - 25;
         my = y - 25;
-        circle = new Ellipse2D.Double(mx, my, 50, 50);
+        ellipse = new Ellipse2D.Double(mx, my, 50, 50);
     }
 
     /**
@@ -55,8 +55,8 @@ class Circle implements SimpleShape, Visitable {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(mx, my, Color.RED, (float)mx + 50, my, Color.WHITE);
         g2.setPaint(gradient);
-        circle = new Ellipse2D.Double(mx, my, 50, 50);
-        g2.fill(circle);
+        ellipse = new Ellipse2D.Double(mx, my, 50, 50);
+        g2.fill(ellipse);
         BasicStroke wideStroke = new BasicStroke(2.0f);
         g2.setColor(color);
         g2.setStroke(wideStroke);
@@ -89,14 +89,14 @@ class Circle implements SimpleShape, Visitable {
 
     @Override
     public boolean contains(int x, int y) {
-        return circle.contains(x, y);
+        return ellipse.contains(x, y);
     }
 
     @Override
     public void move(int dx, int dy) {
         this.mx = dx - 25;
         this.my = dy - 25;
-        circle = new Ellipse2D.Double(mx, my, 50, 50);
+        ellipse = new Ellipse2D.Double(mx, my, 50, 50);
     }
 
     @Override

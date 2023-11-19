@@ -417,6 +417,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                         res.append(",\n");
                     }
 
+
                 } else if (selectedGroup.isInGroup(shape) && startedGroup) {
                     startedGroup = false;
                     res.append("\n\t\t\t]\n\t\t}");

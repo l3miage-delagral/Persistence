@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Group {
 
-    private List<SimpleShape> groupList;
+    private final List<SimpleShape> groupList;
     public Group() {
         groupList = new ArrayList<>();
     }
@@ -16,9 +16,6 @@ public class Group {
         shape.selected(false);
     }
 
-    public void setGroupList(List<SimpleShape> groupList) {
-        this.groupList = groupList;
-    }
     public List<SimpleShape> getListGroup() {
         return groupList;
     }
@@ -36,23 +33,6 @@ public class Group {
     public boolean isInGroup(SimpleShape shape) {
         for (SimpleShape shapeInGroup : groupList) {
             if (shapeInGroup.equals(shape)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void clear() {
-        groupList.clear();
-    }
-
-    public void delete() {
-        // not implemented yet
-    }
-
-    public boolean containsInStarting(SimpleShape shape) {
-        for (SimpleShape shapeInGroup : groupList) {
-            if (shapeInGroup.contains(shape.getX(), shape.getY())) {
                 return true;
             }
         }

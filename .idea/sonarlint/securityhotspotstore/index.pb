@@ -4,8 +4,6 @@
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 Å
 Q.idea/sonarlint/securityhotspotstore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,3\0\30205a209c6ce77c4cfc19a09e6f57c588b7fb88
-P
- conception/DiagramConception.mdj,8\0\802055dbf64fb7298595c05c4ba17d6e7bcb838e
 w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
 ]
@@ -20,15 +18,15 @@ V
 ,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-b
-2src/main/java/fr/uga/miage/m1/shapes/Triangle.java,2\4\240b86d4fb1c470cd0651f4a09814d2d9f2e91f2
-`
-0src/main/java/fr/uga/miage/m1/shapes/Square.java,0\2\02b6cc968e52f13e74944c5a9db15a4de6282f00
 h
 8src/main/java/fr/uga/miage/m1/persistence/Visitable.java,3\1\31704ec3ace0f91e0b928405a7362e385d085601
-^
-.src/main/java/fr/uga/miage/m1/shapes/Cube.java,f\0\f0456013aa39b6fa0992305b4353f651dbe6d6cb
-c
-3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
+M
+src/test/java/CircleTest.java,2\7\27efd82502c760cbfc82b2e098a3ee7bfbc33b91
+j
+:src/main/java/fr/uga/miage/m1/persistence/JSonVisitor.java,a\b\ab527a4fac516e2d9d32bdf04a8ab3f177ec0122
+f
+6src/main/java/fr/uga/miage/m1/persistence/Visitor.java,e\9\e9c77b21c80688aad488d08c2984f46df840a4ba
+i
+9src/main/java/fr/uga/miage/m1/persistence/XMLVisitor.java,6\4\6414a58e19058baa2f5fc3a2f02edfeb6e1fcf5c
+M
+src/test/java/SquareTest.java,8\9\89c758c660b210ed083019e352acae46ab133572

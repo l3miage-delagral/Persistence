@@ -8,7 +8,7 @@ import java.awt.*;
 public class Cube implements SimpleShape {
     private int x;
     private int y;
-    private int z;
+    private final int z;
 
     private final CubePanel cubePanel;
 

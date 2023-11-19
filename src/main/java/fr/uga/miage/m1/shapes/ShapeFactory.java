@@ -1,8 +1,6 @@
 package fr.uga.miage.m1.shapes;
 
 
-import edu.uga.singleshape.CubePanel;
-
 public class ShapeFactory {
     public enum Shapes {
 

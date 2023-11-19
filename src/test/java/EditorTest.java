@@ -21,7 +21,5 @@ class EditorTest {
         editor.play();
         // Verify that the AddShape command has been executed
         verify(commandMock).execute();
-
-        verify(commandMock).equals(editor.getLastCommand());
     }
 }
