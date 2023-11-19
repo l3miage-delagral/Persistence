@@ -1,9 +1,8 @@
 # Persistence
-
 ``Application pour éditer des formes géométriques.
 Permettant de placer des formes géométriques dans un panel.``
 
-# Prerequisites
+# Prérequis
 ``Pour utiliser cette applcation, vous devez avoir installé :``
 `` - Java 8 ou plus.``
 `` - Vous devez avoir aussi installé Maven.``
@@ -13,13 +12,11 @@ Permettant de placer des formes géométriques dans un panel.``
 
 # Utilisation
 ``Pour utiliser l'application, Lancer le main de l'application et suivre les instructons.``
+``Ajouter une ou plusieurs formes dans le panel, 
+A l’aide d’un simple clique, sélectionner la ou les formes que vous voulez ajouter dans le groupe de formes.
+Pour déplacer les formes, il suffit de cliquer sur une forme et la déplacer sur le panel et relâcher la forme à l’endroit souhaité.``
 
-# Presentation
-``L'application utilise le patron visiteur pour sauvegarder et charger des formes géométiques.``
-`` Utilise aussi le patron Commande pour .``
-``plus d'informations que les patrons sur le site suivant : https://sourcemaking.com/design_patterns``
-
-## Functionalities
+## Functionalités
 * ``Placer des formes géométriques dans un panel.``
 * ``Sauvegarder/Exporter les formes dans un fichier au format XML ou JSON.``
 * ``CTRL + Z (annuler) sur des actions effectuées.``
