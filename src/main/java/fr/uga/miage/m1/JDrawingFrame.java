@@ -57,12 +57,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     private int startingDragX;
     private int startingDragY;
 
+    private boolean groupingMode = false;
 
     /**
      * Tracks buttons to manage the background.
      */
     private final EnumMap<ShapeFactory.Shapes, JButton> buttons = new EnumMap<>(ShapeFactory.Shapes.class);
 
+    private JButton buttonGroup = new JButton("New Group", null);
     /**
      * Default constructor that populates the main window.
      *
@@ -94,8 +96,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         addButtonShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon(URL + "/resources/images/triangle.png"));
         addButtonShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon(URL + "/resources/images/circle.png"));
         addButtonShape(ShapeFactory.Shapes.CUBE, new ImageIcon(URL + "/resources/images/underc.png"));
-        addButton(buttonJSON, "JSON");
-        addButton(buttonXML,"XML");
+        addButtonFile(buttonJSON, "JSON");
+        addButtonFile(buttonXML,"XML");
+        addButton(buttonGroup);
         setPreferredSize(new Dimension(400, 400));
 
         editor = new Editor();
@@ -135,7 +138,18 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         repaint();
     }
 
-    private void addButton(JButton button, String typeFile) {
+    private void addButton(JButton button) {
+        button.setBorderPainted(false);
+        toolbar.add(button);
+        toolbar.validate();
+        repaint();
+        button.setActionCommand("Group Mode");
+        reusableActionListener = new ButtonActionListener();
+        button.addActionListener(reusableActionListener);
+        buttons.put(selected, button);
+    }
+
+    private void addButtonFile(JButton button, String typeFile) {
         button.setBorderPainted(false);
         toolbar.add(button);
         toolbar.validate();
@@ -143,7 +157,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         button.setActionCommand("Export button " + typeFile.toUpperCase());
         reusableActionListener = new ShapeActionListener();
         button.addActionListener(reusableActionListener);
-
     }
 
 
@@ -163,15 +176,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
 
         if(panel.contains(evt.getX(), evt.getY())) {
-             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
-             if (shape == null) {
+            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
+            if (shape == null) {
                 LOGGER.warning("No shape selected");
-             } else {
+            } else {
                 editor.addCommand(new AddShape(this,shape));
                 editor.play();
-             }
-             isClicked = true;
-
+            }
+            isClicked = true;
         }
 
     }
@@ -311,7 +323,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void componentResized(MouseEvent e) { // default implementation ignored
     }
 
-
     /**
      * Implements an empty method for the <tt>MouseMotionListener</tt>
      * interface.
@@ -354,30 +365,31 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
 
-    /**
-     * Simple action listener for shape tool bar buttons that sets
-     * the drawing frame's currently selected shape when receiving
-     * an action event.
-     */
-    private class ShapeActionListener extends Component implements ActionListener {
+    private class ButtonActionListener extends Component implements ActionListener {
 
+        boolean exportRequested = false; // Indicateur pour vérifier si une action d'exportation a été demandée
+
+        @Override
         public void actionPerformed(ActionEvent evt) {
-            boolean exportRequested = false; // Indicateur pour vérifier si une action d'exportation a été demandée
-            // Itère sur tous les boutons
-            for (Map.Entry<ShapeFactory.Shapes, JButton> entry : buttons.entrySet()) {
-                ShapeFactory.Shapes shape = entry.getKey();
-                JButton btn = entry.getValue();
-                if (evt.getActionCommand().equals(shape.toString())) {
-                    btn.setBorderPainted(true);
-                    selected = shape;
-                } else if (evt.getActionCommand().equals("Export button JSON")) {
-                    exportRequested = true;
-                } else if (evt.getActionCommand().equals("Export button XML")) {
-                    exportRequested = true;
+                
+            if (evt.getActionCommand().equals("Group Mode")) {
+                    
+                if (groupingMode){
+                    groupingMode = false;
+                    selectedGroup = null;
+                    buttonGroup.setBackground(Color.WHITE);
                 } else {
-                    btn.setBorderPainted(false);
+                    groupingMode = true;
+                    buttonGroup.setBackground(Color.BLUE);
+                    newGroup();
                 }
-                btn.repaint();
+                buttonGroup.repaint();
+
+            } else if (evt.getActionCommand().equals("Export button JSON")) {
+                exportRequested = true;
+
+            } else if (evt.getActionCommand().equals("Export button XML")) {
+                exportRequested = true;
             }
 
             // Une seule déclaration continue à la fin, si une action d'exportation a été demandée
@@ -390,6 +402,12 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
         }
 
+        /**
+        * New group in grouping Mode
+        */
+        private void newGroup() {
+            selectedGroup = new Group();
+        }
 
         /**
          * Creation of JSON string for JSON export
@@ -527,7 +545,30 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
 
         }
+    }
 
+    /**
+     * Simple action listener for shape tool bar buttons that sets
+     * the drawing frame's currently selected shape when receiving
+     * an action event.
+     */
+    private class ShapeActionListener extends Component implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt) {
+            
+            // Itère sur tous les boutons
+            for (Map.Entry<ShapeFactory.Shapes, JButton> entry : buttons.entrySet()) {
+                ShapeFactory.Shapes shape = entry.getKey();
+                JButton btn = entry.getValue();
+                if (evt.getActionCommand().equals(shape.toString())) {
+                    btn.setBorderPainted(true);
+                    selected = shape;
+                } else {
+                    btn.setBorderPainted(false);
+                }
+                btn.repaint();
+            }
+        }
     }
 
 }
