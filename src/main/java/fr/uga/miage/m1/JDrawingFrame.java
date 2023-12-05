@@ -48,6 +48,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient Group selectedGroup = null;
 
+    private SimpleShape selectedShape = null;
+
     private final transient Editor editor;
 
     private boolean isClicked;
@@ -230,42 +232,12 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
 
         for (SimpleShape shape : listShapes) {
-            SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX() + 25, shape.getY() + 25, 0);
-
-            if (shape.contains(evt.getX(), evt.getY())){
-
-                if (selectedGroup != null){
-                    if (!selectedGroup.isInGroup(shape)) {
-                        selectedGroup.add(shape);
-                    } else if (selectedGroup.isInGroup(shape)) {
-                        majStartingShapeList();
-                        startingDragX = evt.getX();
-                        startingDragY = evt.getY();
-                        isClicked = false;
-                        return;
-                    }
-                } else {
-                    this.selectedGroup = new Group();
-                    selectedGroup.add(shape);
-                }
-                startingShapeList.add(shapeCopy);
-                shape.draw((Graphics2D) panel.getGraphics());
-
-                startingDragX = evt.getX();
-                startingDragY = evt.getY();
+            if(shape.contains(evt.getX(), evt.getX())) {
+                selectedShape = shape;
                 isClicked = false;
             }
         }
         LOGGER.info("Shape selected");
-    }
-
-    private void majStartingShapeList() {
-        startingShapeList.clear();
-        for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
-
-            startingShapeList.add(ShapeFactory.getInstance().createSimpleShape(shapeInGroup.getShapeType(), shapeInGroup.getX() + 25, shapeInGroup.getY() + 25, 0));
-
-        }
     }
 
 
@@ -277,21 +249,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     public void mouseDragged(MouseEvent evt) {
 
-        if (selectedGroup != null) {
-            int compteur = 0;
-            for (SimpleShape shape : selectedGroup.getListGroup()) {
-                if (startingShapeList.size() <= compteur) {
-                    return;
-                }
-                SimpleShape startShape = startingShapeList.get(compteur);
-
-                int deltaX = evt.getX() - startingDragX + 25;
-                int deltaY = evt.getY() - startingDragY + 25;
-                shape.selected(true);
-                shape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
-                shape.draw((Graphics2D) panel.getGraphics());
-                compteur++;
-            }
+        if (!groupingMode && selectedShape != null) {
+            selectedShape.draw((Graphics2D) panel.getGraphics());
             isDragged = true;
         }
     }
@@ -305,19 +264,16 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         if(isClicked) {
             return;
         }
-        if (selectedGroup != null && isDragged) {
+        if (selectedShape != null && isDragged) {
 
             int deltaX = e.getX() - startingDragX + 25;
             int deltaY = e.getY() - startingDragY + 25;
 
-            MoveShape moveShape = new MoveShape(this, startingShapeList, selectedGroup,deltaX, deltaY, e.getX(), e.getY());
-
+            MoveShape moveShape = new MoveShape(this, selectedShape, deltaX, deltaY);
             editor.addCommand(moveShape);
             editor.play();
-
-            startingShapeList.clear();
-
             isDragged = false;
+            selectedShape = null;
         }
     }
 
@@ -346,13 +302,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void validerGroup() {
         Group group = new Group(selectedGroup.getListGroup());
         for (SimpleShape shape : group.getListGroup()) {
-            listShapes.remove(shape);
+            removeShape(shape);
         }
         group.validerGroup(Color.BLUE);
-        editor.addCommand(new AddShape(this, group));
-        this.paintComponents(this.getGraphics());
+        group.draw((Graphics2D) this.panel.getGraphics());
         groupingMode = false;
         selectedGroup = null;
+        editor.addCommand(new AddShape(this, group));
+        
     }
 
     @Override
@@ -376,9 +333,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
         LOGGER.info("Shape removed");
         listShapes.remove(shape);
-        if (selectedGroup != null && selectedGroup.isInGroup(shape)) {
-            selectedGroup.remove(shape);
-        }
         this.paintComponents(this.getGraphics());
     }
 

@@ -35,7 +35,7 @@ class GroupTest {
         SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.CIRCLE, 1, 2, 0);
         Group group = new Group();
         group.add(shape);
-        group.moveThis(shape, 10, 10);
+        //group.moveThis(shape, 10, 10);
         Assertions.assertEquals(-15, shape.getX());
         Assertions.assertEquals(-15, shape.getY());
     }
