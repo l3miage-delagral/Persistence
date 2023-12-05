@@ -169,13 +169,17 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void mouseClicked(MouseEvent evt) {
 
         for (SimpleShape shape : listShapes) {
-            if (shape.contains(evt.getX(), evt.getY())) {
-                isClicked = false;
+            if (shape.contains(evt.getX(), evt.getY()) && groupingMode) {
+                isClicked = true;
+                shape.selected(true);
+                selectedGroup.add(shape);
+                shape.draw((Graphics2D) this.panel.getGraphics());
                 return;
             }
+            isClicked = false;
         }
 
-        if(panel.contains(evt.getX(), evt.getY())) {
+        if(panel.contains(evt.getX(), evt.getY()) && !groupingMode) {
             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
             if (shape == null) {
                 LOGGER.warning("No shape selected");
@@ -185,7 +189,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
             isClicked = true;
         }
-
     }
 
     public void addShape(SimpleShape shape){
@@ -222,7 +225,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param evt The associated mouse event.
      */
     public void mousePressed(MouseEvent evt) {
-        if (listShapes.isEmpty()) {
+        if (listShapes.isEmpty() || groupingMode) {
             return;
         }
 
@@ -315,7 +318,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             startingShapeList.clear();
 
             isDragged = false;
-
         }
     }
 
@@ -341,6 +343,18 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         return listShapes;
     }
 
+    public void validerGroup() {
+        Group group = new Group(selectedGroup.getListGroup());
+        for (SimpleShape shape : group.getListGroup()) {
+            listShapes.remove(shape);
+        }
+        group.validerGroup(Color.BLUE);
+        editor.addCommand(new AddShape(this, group));
+        this.paintComponents(this.getGraphics());
+        groupingMode = false;
+        selectedGroup = null;
+    }
+
     @Override
     public void paintComponents(Graphics g) {
         super.paintComponents(g);
@@ -355,7 +369,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         if (listShapes.isEmpty()){
             LOGGER.info("Canvas is empty");
             return;
+        } else if (!listShapes.contains(shape)) {
+            LOGGER.info("Shape already removed");
+            return;
         }
+
         LOGGER.info("Shape removed");
         listShapes.remove(shape);
         if (selectedGroup != null && selectedGroup.isInGroup(shape)) {
@@ -363,7 +381,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
         this.paintComponents(this.getGraphics());
     }
-
 
     private class ButtonActionListener extends Component implements ActionListener {
 
@@ -373,10 +390,10 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         public void actionPerformed(ActionEvent evt) {
                 
             if (evt.getActionCommand().equals("Group Mode")) {
-                    
                 if (groupingMode){
-                    groupingMode = false;
-                    selectedGroup = null;
+                    if (selectedGroup != null) {
+                        validerGroup();
+                    }
                     buttonGroup.setBackground(Color.WHITE);
                 } else {
                     groupingMode = true;

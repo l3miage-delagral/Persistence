@@ -120,4 +120,9 @@ class Square implements SimpleShape, Visitable {
         return ShapeFactory.Shapes.SQUARE;
     }
 
+    @Override
+    public void validerGroup(Color color) {
+        this.color = color;
+    }
+
 }

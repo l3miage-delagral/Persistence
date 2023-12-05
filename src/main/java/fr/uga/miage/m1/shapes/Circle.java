@@ -113,4 +113,9 @@ class Circle implements SimpleShape, Visitable {
         return ShapeFactory.Shapes.CIRCLE;
     }
 
+    @Override
+    public void validerGroup(Color color) {
+        this.color = color;
+    }
+
 }
