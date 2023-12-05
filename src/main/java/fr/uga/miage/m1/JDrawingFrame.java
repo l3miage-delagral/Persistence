@@ -309,7 +309,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         groupingMode = false;
         selectedGroup = null;
         editor.addCommand(new AddShape(this, group));
-        
+        editor.play();
     }
 
     @Override
@@ -323,17 +323,27 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     // This method is called when the user makes Ctrl z
     public void removeShape(SimpleShape shape) {
+        SimpleShape shapeFromList = this.isInList(shape);
         if (listShapes.isEmpty()){
             LOGGER.info("Canvas is empty");
             return;
-        } else if (!listShapes.contains(shape)) {
+        } else if (shapeFromList == null) {
             LOGGER.info("Shape already removed");
             return;
         }
 
         LOGGER.info("Shape removed");
-        listShapes.remove(shape);
+        listShapes.remove(shapeFromList);
         this.paintComponents(this.getGraphics());
+    }
+
+    public SimpleShape isInList(SimpleShape shape) {
+        for (SimpleShape shapeFromList : listShapes) {
+            if (shape.contains(shapeFromList.getX(), shapeFromList.getY())) {
+                return shapeFromList;
+            }
+        }
+        return null;
     }
 
     private class ButtonActionListener extends Component implements ActionListener {

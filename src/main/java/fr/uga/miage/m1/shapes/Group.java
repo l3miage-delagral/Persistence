@@ -49,6 +49,8 @@ public class Group implements SimpleShape{
         return false;
     }
 
+    
+
     @Override
     public Object accept(Visitor visitor) {
         visitor.visit(this);
