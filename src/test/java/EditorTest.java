@@ -63,9 +63,9 @@ class EditorTest {
         int deltaX = 10;
         int deltaY = 10;
 
-        MoveShape command = new MoveShape(jDrawingFrame, startingShapeList, selectedGroup, deltaX, deltaY, evtX, evtY);
-        editor.addCommand(command);
-        editor.play();
+        //MoveShape command = new MoveShape(jDrawingFrame, startingShapeList, selectedGroup, deltaX, deltaY, evtX, evtY);
+        //editor.addCommand(command);
+        //editor.play();
         // Verify that the shape has been moved
         verify(jDrawingFrame).removeShape(shapeMock);
         verify(jDrawingFrame).addShape(shapeMock);

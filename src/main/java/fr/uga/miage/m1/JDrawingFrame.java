@@ -44,9 +44,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private final transient List<SimpleShape> listShapes = new ArrayList<>();
 
-    private final List<SimpleShape> startingShapeList = new ArrayList<>();
-
     private transient Group selectedGroup = null;
+
+    private transient SimpleShape selectedShape = null;
 
     private final transient Editor editor;
 
@@ -57,12 +57,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     private int startingDragX;
     private int startingDragY;
 
+    private boolean groupingMode = false;
 
     /**
      * Tracks buttons to manage the background.
      */
     private final EnumMap<ShapeFactory.Shapes, JButton> buttons = new EnumMap<>(ShapeFactory.Shapes.class);
 
+    private JButton buttonGroup = new JButton("New Group", null);
     /**
      * Default constructor that populates the main window.
      *
@@ -94,8 +96,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         addButtonShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon(URL + "/resources/images/triangle.png"));
         addButtonShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon(URL + "/resources/images/circle.png"));
         addButtonShape(ShapeFactory.Shapes.CUBE, new ImageIcon(URL + "/resources/images/underc.png"));
-        addButton(buttonJSON, "JSON");
-        addButton(buttonXML,"XML");
+        addButtonFile(buttonJSON, "JSON");
+        addButtonFile(buttonXML,"XML");
+        addButton(buttonGroup);
         setPreferredSize(new Dimension(400, 400));
 
         editor = new Editor();
@@ -135,15 +138,36 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         repaint();
     }
 
-    private void addButton(JButton button, String typeFile) {
+    private void addButton(JButton button) {
         button.setBorderPainted(false);
         toolbar.add(button);
         toolbar.validate();
         repaint();
-        button.setActionCommand("Export button " + typeFile.toUpperCase());
-        reusableActionListener = new ShapeActionListener();
+        button.setActionCommand("Group Mode");
+        reusableActionListener = new ButtonActionListener();
         button.addActionListener(reusableActionListener);
+        buttons.put(selected, button);
+    }
 
+    private void addButtonFile(JButton button, String typeFile) {
+        button.setBorderPainted(false);
+        toolbar.add(button);
+        toolbar.validate();
+        repaint();
+    
+        // Crée un nouveau gestionnaire d'événements pour les boutons d'exportation
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (evt.getActionCommand().contains("JSON")) {
+                    exportJSON();
+                } else if (evt.getActionCommand().contains("XML")) {
+                    exportXML();
+                }
+            }
+        });
+    
+        buttons.put(selected, button);
     }
 
 
@@ -156,24 +180,26 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void mouseClicked(MouseEvent evt) {
 
         for (SimpleShape shape : listShapes) {
-            if (shape.contains(evt.getX(), evt.getY())) {
-                isClicked = false;
+            if (shape.contains(evt.getX(), evt.getY()) && groupingMode) {
+                isClicked = true;
+                shape.selected(true);
+                selectedGroup.add(shape);
+                shape.draw((Graphics2D) this.panel.getGraphics());
                 return;
             }
+            isClicked = false;
         }
 
-        if(panel.contains(evt.getX(), evt.getY())) {
-             SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
-             if (shape == null) {
+        if(panel.contains(evt.getX(), evt.getY()) && !groupingMode) {
+            SimpleShape shape = ShapeFactory.getInstance().createSimpleShape(selected, evt.getX(), evt.getY(), 0);
+            if (shape == null) {
                 LOGGER.warning("No shape selected");
-             } else {
+            } else {
                 editor.addCommand(new AddShape(this,shape));
                 editor.play();
-             }
-             isClicked = true;
-
+            }
+            isClicked = true;
         }
-
     }
 
     public void addShape(SimpleShape shape){
@@ -210,47 +236,20 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * @param evt The associated mouse event.
      */
     public void mousePressed(MouseEvent evt) {
-        if (listShapes.isEmpty()) {
+        if (listShapes.isEmpty() || groupingMode) {
             return;
         }
 
+        startingDragX = evt.getX();
+        startingDragY = evt.getY();
+
         for (SimpleShape shape : listShapes) {
-            SimpleShape shapeCopy = ShapeFactory.getInstance().createSimpleShape(shape.getShapeType(), shape.getX() + 25, shape.getY() + 25, 0);
-
-            if (shape.contains(evt.getX(), evt.getY())){
-
-                if (selectedGroup != null){
-                    if (!selectedGroup.isInGroup(shape)) {
-                        selectedGroup.add(shape);
-                    } else if (selectedGroup.isInGroup(shape)) {
-                        majStartingShapeList();
-                        startingDragX = evt.getX();
-                        startingDragY = evt.getY();
-                        isClicked = false;
-                        return;
-                    }
-                } else {
-                    this.selectedGroup = new Group();
-                    selectedGroup.add(shape);
-                }
-                startingShapeList.add(shapeCopy);
-                shape.draw((Graphics2D) panel.getGraphics());
-
-                startingDragX = evt.getX();
-                startingDragY = evt.getY();
+            if(shape.contains(evt.getX(), evt.getY())) {
+                selectedShape = shape;
                 isClicked = false;
             }
         }
-        LOGGER.info("Shape selected");
-    }
 
-    private void majStartingShapeList() {
-        startingShapeList.clear();
-        for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
-
-            startingShapeList.add(ShapeFactory.getInstance().createSimpleShape(shapeInGroup.getShapeType(), shapeInGroup.getX() + 25, shapeInGroup.getY() + 25, 0));
-
-        }
     }
 
 
@@ -262,21 +261,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     public void mouseDragged(MouseEvent evt) {
 
-        if (selectedGroup != null) {
-            int compteur = 0;
-            for (SimpleShape shape : selectedGroup.getListGroup()) {
-                if (startingShapeList.size() <= compteur) {
-                    return;
-                }
-                SimpleShape startShape = startingShapeList.get(compteur);
-
-                int deltaX = evt.getX() - startingDragX + 25;
-                int deltaY = evt.getY() - startingDragY + 25;
-                shape.selected(true);
-                shape.move(startShape.getX() + deltaX, startShape.getY() + deltaY);
-                shape.draw((Graphics2D) panel.getGraphics());
-                compteur++;
-            }
+        if (!groupingMode && selectedShape != null) {
+            //selectedShape.move(evt.getX(), evt.getY()); // effet artistique de déplacement
+            selectedShape.draw((Graphics2D) this.panel.getGraphics());
             isDragged = true;
         }
     }
@@ -290,27 +277,22 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         if(isClicked) {
             return;
         }
-        if (selectedGroup != null && isDragged) {
+        if (selectedShape != null && isDragged) {
 
-            int deltaX = e.getX() - startingDragX + 25;
-            int deltaY = e.getY() - startingDragY + 25;
+            int deltaX = e.getX() - startingDragX;
+            int deltaY = e.getY() - startingDragY;
 
-            MoveShape moveShape = new MoveShape(this, startingShapeList, selectedGroup,deltaX, deltaY, e.getX(), e.getY());
-
+            MoveShape moveShape = new MoveShape(this, selectedShape, deltaX, deltaY);
             editor.addCommand(moveShape);
             editor.play();
-
-            startingShapeList.clear();
-
             isDragged = false;
-
+            selectedShape = null;
         }
     }
 
 
     public void componentResized(MouseEvent e) { // default implementation ignored
     }
-
 
     /**
      * Implements an empty method for the <tt>MouseMotionListener</tt>
@@ -330,6 +312,19 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         return listShapes;
     }
 
+    public void validerGroup() {
+        Group group = new Group(selectedGroup.getListGroup());
+        for (SimpleShape shape : group.getListGroup()) {
+            removeShape(shape);
+        }
+        group.validerGroup(Color.BLUE);
+        group.draw((Graphics2D) this.panel.getGraphics());
+        groupingMode = false;
+        selectedGroup = null;
+        editor.addCommand(new AddShape(this, group));
+        editor.play();
+    }
+
     @Override
     public void paintComponents(Graphics g) {
         super.paintComponents(g);
@@ -341,57 +336,30 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     // This method is called when the user makes Ctrl z
     public void removeShape(SimpleShape shape) {
+        SimpleShape shapeFromList = this.isInList(shape);
         if (listShapes.isEmpty()){
             LOGGER.info("Canvas is empty");
             return;
+        } else if (shapeFromList == null) {
+            LOGGER.info("Shape already removed");
+            return;
         }
+
         LOGGER.info("Shape removed");
-        listShapes.remove(shape);
-        if (selectedGroup != null && selectedGroup.isInGroup(shape)) {
-            selectedGroup.remove(shape);
-        }
+        listShapes.remove(shapeFromList);
         this.paintComponents(this.getGraphics());
     }
 
-
-    /**
-     * Simple action listener for shape tool bar buttons that sets
-     * the drawing frame's currently selected shape when receiving
-     * an action event.
-     */
-    private class ShapeActionListener extends Component implements ActionListener {
-
-        public void actionPerformed(ActionEvent evt) {
-            boolean exportRequested = false; // Indicateur pour vérifier si une action d'exportation a été demandée
-            // Itère sur tous les boutons
-            for (Map.Entry<ShapeFactory.Shapes, JButton> entry : buttons.entrySet()) {
-                ShapeFactory.Shapes shape = entry.getKey();
-                JButton btn = entry.getValue();
-                if (evt.getActionCommand().equals(shape.toString())) {
-                    btn.setBorderPainted(true);
-                    selected = shape;
-                } else if (evt.getActionCommand().equals("Export button JSON")) {
-                    exportRequested = true;
-                } else if (evt.getActionCommand().equals("Export button XML")) {
-                    exportRequested = true;
-                } else {
-                    btn.setBorderPainted(false);
-                }
-                btn.repaint();
-            }
-
-            // Une seule déclaration continue à la fin, si une action d'exportation a été demandée
-            if (exportRequested) {
-                if (evt.getActionCommand().equals("Export button JSON")) {
-                    exportJSON();
-                } else if (evt.getActionCommand().equals("Export button XML")) {
-                    exportXML();
-                }
+    public SimpleShape isInList(SimpleShape shape) {
+        for (SimpleShape shapeFromList : listShapes) {
+            if (shape.contains(shapeFromList.getX(), shapeFromList.getY()) || shape.getX() == shapeFromList.getX() && shape.getY() == shapeFromList.getY()) {
+                return shapeFromList;
             }
         }
+        return null;
+    }
 
-
-        /**
+    /**
          * Creation of JSON string for JSON export
          */
         private void exportJSON() {
@@ -405,11 +373,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     res.append(",\n");
                 }
 
-                if(selectedGroup.isInGroup(shape) && !startedGroup){
+                if(shape.getShapeName().contains("group")){
                     startedGroup = true;
                     res.append("\t\t{\n\t\t\t\"group\" : [\n");
 
-                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                    for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
                         shapeInGroup.accept(new JSonVisitor());
                         JSonVisitor visitor = new JSonVisitor();
                         shapeInGroup.accept(visitor);
@@ -418,7 +386,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     }
 
 
-                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
+                } else if (shape.getShapeName().contains("group") && startedGroup) {
                     startedGroup = false;
                     res.append("\n\t\t\t]\n\t\t}");
 
@@ -447,26 +415,22 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
          */
         private void exportXML() {
             StringBuilder res = new StringBuilder();
-            boolean startedGroup = false;
             res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
 
             for (SimpleShape shape : listShapes) {
 
-                if(selectedGroup.isInGroup(shape) && !startedGroup){
-                    startedGroup = true;
+                if(shape.getShapeName().contains("group")){
                     res.append("\n\t\t<group>\n");
 
-                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                    for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
                         shapeInGroup.accept(new XMLVisitor());
                         XMLVisitor visitor = new XMLVisitor();
                         shapeInGroup.accept(visitor);
                         res.append(visitor.getRepresentation());
                         res.append("\n");
                     }
-
-                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
-                    startedGroup = false;
                     res.append("\n\t\t</group>\n");
+                    
 
                 } else {
                     XMLVisitor visitor = new XMLVisitor();
@@ -528,6 +492,65 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
         }
 
+    private class ButtonActionListener extends Component implements ActionListener {
+
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+                
+            if (evt.getActionCommand().equals("Group Mode")) {
+                if (groupingMode){
+                    if (selectedGroup != null) {
+                        validerGroup();
+                    }
+                    buttonGroup.setBackground(Color.WHITE);
+                } else {
+                    groupingMode = true;
+                    buttonGroup.setBackground(Color.BLUE);
+                    newGroup();
+                }
+                buttonGroup.repaint();
+
+            } else if (evt.getActionCommand().contains("JSON")) {
+                exportJSON();
+
+            } else if (evt.getActionCommand().contains("XML")) {
+                exportXML();
+            }
+        }
+
+        /**
+        * New group in grouping Mode
+        */
+        private void newGroup() {
+            selectedGroup = new Group();
+        }
+
+        
+    }
+
+    /**
+     * Simple action listener for shape tool bar buttons that sets
+     * the drawing frame's currently selected shape when receiving
+     * an action event.
+     */
+    private class ShapeActionListener extends Component implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt) {
+            
+            // Itère sur tous les boutons
+            for (Map.Entry<ShapeFactory.Shapes, JButton> entry : buttons.entrySet()) {
+                ShapeFactory.Shapes shape = entry.getKey();
+                JButton btn = entry.getValue();
+                if (evt.getActionCommand().equals(shape.toString())) {
+                    btn.setBorderPainted(true);
+                    selected = shape;
+                } else {
+                    btn.setBorderPainted(false);
+                }
+                btn.repaint();
+            }
+        }
     }
 
 }
