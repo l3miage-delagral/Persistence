@@ -34,4 +34,6 @@ public interface SimpleShape extends Visitable {
 
     void selected(boolean selected);
 
+    void validerGroup(Color color);
+
 }

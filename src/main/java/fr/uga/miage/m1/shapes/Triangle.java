@@ -126,4 +126,9 @@ class Triangle implements SimpleShape, Visitable {
         return ShapeFactory.Shapes.TRIANGLE;
     }
 
+    @Override
+    public void validerGroup(Color color) {
+        this.color = color;
+    }
+
 }

@@ -71,4 +71,10 @@ public class Cube implements SimpleShape {
     public void selected(boolean selected ) {
         // not yet implemented
     }
+
+
+    @Override
+    public void validerGroup(Color color) {
+        // not implemented
+    }
 }

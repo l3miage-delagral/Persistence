@@ -96,7 +96,6 @@ class Circle implements SimpleShape, Visitable {
     public void move(int dx, int dy) {
         this.mx = dx - 25;
         this.my = dy - 25;
-        ellipse = new Ellipse2D.Double(mx, my, 50, 50);
     }
 
     @Override
@@ -111,6 +110,11 @@ class Circle implements SimpleShape, Visitable {
     @Override
     public ShapeFactory.Shapes getShapeType(){
         return ShapeFactory.Shapes.CIRCLE;
+    }
+
+    @Override
+    public void validerGroup(Color color) {
+        this.color = color;
     }
 
 }
