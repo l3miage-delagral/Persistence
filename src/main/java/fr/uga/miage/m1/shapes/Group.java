@@ -102,7 +102,7 @@ public class Group implements SimpleShape{
     @Override
     public void move(int x, int y) {
         for (SimpleShape shape : groupList) {
-            shape.move(x, y);
+            shape.move(shape.getX() + x, shape.getY() + y);
         }
     }
 

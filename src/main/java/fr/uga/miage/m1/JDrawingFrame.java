@@ -229,8 +229,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             return;
         }
 
+        startingDragX = evt.getX();
+        startingDragY = evt.getY();
+
         for (SimpleShape shape : listShapes) {
-            if(shape.contains(evt.getX(), evt.getX())) {
+            if(shape.contains(evt.getX(), evt.getY())) {
                 selectedShape = shape;
                 isClicked = false;
             }
@@ -248,7 +251,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     public void mouseDragged(MouseEvent evt) {
 
         if (!groupingMode && selectedShape != null) {
-            selectedShape.draw((Graphics2D) panel.getGraphics());
+            //selectedShape.move(evt.getX(), evt.getY()); // effet artistique de déplacement
+            selectedShape.draw((Graphics2D) this.panel.getGraphics());
             isDragged = true;
         }
     }
@@ -264,8 +268,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
         if (selectedShape != null && isDragged) {
 
-            int deltaX = e.getX() - startingDragX + 25;
-            int deltaY = e.getY() - startingDragY + 25;
+            int deltaX = e.getX() - startingDragX;
+            int deltaY = e.getY() - startingDragY;
 
             MoveShape moveShape = new MoveShape(this, selectedShape, deltaX, deltaY);
             editor.addCommand(moveShape);
