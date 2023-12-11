@@ -44,11 +44,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private final transient List<SimpleShape> listShapes = new ArrayList<>();
 
-    private final List<SimpleShape> startingShapeList = new ArrayList<>();
-
     private transient Group selectedGroup = null;
 
-    private SimpleShape selectedShape = null;
+    private transient SimpleShape selectedShape = null;
 
     private final transient Editor editor;
 
