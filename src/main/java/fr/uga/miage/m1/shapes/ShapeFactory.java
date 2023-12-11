@@ -4,7 +4,7 @@ package fr.uga.miage.m1.shapes;
 public class ShapeFactory {
     public enum Shapes {
 
-        SQUARE, TRIANGLE, CIRCLE, CUBE
+        SQUARE, TRIANGLE, CIRCLE, CUBE, GROUP
     }
 
     private static ShapeFactory instance = null;

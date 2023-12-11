@@ -3,6 +3,7 @@ package fr.uga.miage.m1.shapes;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,12 +82,12 @@ public class Group implements SimpleShape{
 
     @Override
     public String getShapeName() {
-        return null;
+        return "group";
     }
 
     @Override
     public Shapes getShapeType() {
-        return null;
+        return ShapeFactory.Shapes.GROUP;
     }
 
     @Override

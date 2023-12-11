@@ -154,9 +154,20 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         toolbar.add(button);
         toolbar.validate();
         repaint();
-        button.setActionCommand("Export button " + typeFile.toUpperCase());
-        reusableActionListener = new ShapeActionListener();
-        button.addActionListener(reusableActionListener);
+    
+        // Crée un nouveau gestionnaire d'événements pour les boutons d'exportation
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if (evt.getActionCommand().contains("JSON")) {
+                    exportJSON();
+                } else if (evt.getActionCommand().contains("XML")) {
+                    exportXML();
+                }
+            }
+        });
+    
+        buttons.put(selected, button);
     }
 
 
@@ -238,7 +249,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 isClicked = false;
             }
         }
-        LOGGER.info("Shape selected");
+
     }
 
 
@@ -341,58 +352,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     public SimpleShape isInList(SimpleShape shape) {
         for (SimpleShape shapeFromList : listShapes) {
-            if (shape.contains(shapeFromList.getX(), shapeFromList.getY())) {
+            if (shape.contains(shapeFromList.getX(), shapeFromList.getY()) || shape.getX() == shapeFromList.getX() && shape.getY() == shapeFromList.getY()) {
                 return shapeFromList;
             }
         }
         return null;
     }
 
-    private class ButtonActionListener extends Component implements ActionListener {
-
-        boolean exportRequested = false; // Indicateur pour vérifier si une action d'exportation a été demandée
-
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-                
-            if (evt.getActionCommand().equals("Group Mode")) {
-                if (groupingMode){
-                    if (selectedGroup != null) {
-                        validerGroup();
-                    }
-                    buttonGroup.setBackground(Color.WHITE);
-                } else {
-                    groupingMode = true;
-                    buttonGroup.setBackground(Color.BLUE);
-                    newGroup();
-                }
-                buttonGroup.repaint();
-
-            } else if (evt.getActionCommand().equals("Export button JSON")) {
-                exportRequested = true;
-
-            } else if (evt.getActionCommand().equals("Export button XML")) {
-                exportRequested = true;
-            }
-
-            // Une seule déclaration continue à la fin, si une action d'exportation a été demandée
-            if (exportRequested) {
-                if (evt.getActionCommand().equals("Export button JSON")) {
-                    exportJSON();
-                } else if (evt.getActionCommand().equals("Export button XML")) {
-                    exportXML();
-                }
-            }
-        }
-
-        /**
-        * New group in grouping Mode
-        */
-        private void newGroup() {
-            selectedGroup = new Group();
-        }
-
-        /**
+    /**
          * Creation of JSON string for JSON export
          */
         private void exportJSON() {
@@ -406,11 +373,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     res.append(",\n");
                 }
 
-                if(selectedGroup.isInGroup(shape) && !startedGroup){
+                if(shape.getShapeName().contains("group")){
                     startedGroup = true;
                     res.append("\t\t{\n\t\t\t\"group\" : [\n");
 
-                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                    for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
                         shapeInGroup.accept(new JSonVisitor());
                         JSonVisitor visitor = new JSonVisitor();
                         shapeInGroup.accept(visitor);
@@ -419,7 +386,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     }
 
 
-                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
+                } else if (shape.getShapeName().contains("group") && startedGroup) {
                     startedGroup = false;
                     res.append("\n\t\t\t]\n\t\t}");
 
@@ -448,26 +415,22 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
          */
         private void exportXML() {
             StringBuilder res = new StringBuilder();
-            boolean startedGroup = false;
             res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
 
             for (SimpleShape shape : listShapes) {
 
-                if(selectedGroup.isInGroup(shape) && !startedGroup){
-                    startedGroup = true;
+                if(shape.getShapeName().contains("group")){
                     res.append("\n\t\t<group>\n");
 
-                    for (SimpleShape shapeInGroup : selectedGroup.getListGroup()) {
+                    for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
                         shapeInGroup.accept(new XMLVisitor());
                         XMLVisitor visitor = new XMLVisitor();
                         shapeInGroup.accept(visitor);
                         res.append(visitor.getRepresentation());
                         res.append("\n");
                     }
-
-                } else if (selectedGroup.isInGroup(shape) && startedGroup) {
-                    startedGroup = false;
                     res.append("\n\t\t</group>\n");
+                    
 
                 } else {
                     XMLVisitor visitor = new XMLVisitor();
@@ -528,6 +491,42 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
 
         }
+
+    private class ButtonActionListener extends Component implements ActionListener {
+
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+                
+            if (evt.getActionCommand().equals("Group Mode")) {
+                if (groupingMode){
+                    if (selectedGroup != null) {
+                        validerGroup();
+                    }
+                    buttonGroup.setBackground(Color.WHITE);
+                } else {
+                    groupingMode = true;
+                    buttonGroup.setBackground(Color.BLUE);
+                    newGroup();
+                }
+                buttonGroup.repaint();
+
+            } else if (evt.getActionCommand().contains("JSON")) {
+                exportJSON();
+
+            } else if (evt.getActionCommand().contains("XML")) {
+                exportXML();
+            }
+        }
+
+        /**
+        * New group in grouping Mode
+        */
+        private void newGroup() {
+            selectedGroup = new Group();
+        }
+
+        
     }
 
     /**
