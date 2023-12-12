@@ -10,8 +10,6 @@ G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
 S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
-\
-,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 h
@@ -20,10 +18,6 @@ f
 6src/main/java/fr/uga/miage/m1/persistence/Visitor.java,e\9\e9c77b21c80688aad488d08c2984f46df840a4ba
 T
 $conception/IT2/DiagramConception.mdj,4\e\4ebf04279ecad6cd815630f9212cf925cd202296
-c
-3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
-S
-#src/test/java/ShapeFactoryTest.java,1\b\1bc12387dc8110da4a09db1e2d2e6d00e647a16e
 V
 &src/main/java/fr/uga/miage/m1/App.java,2\e\2e15481bd610f315e43a77edb153f66532873263
 e
@@ -48,8 +42,6 @@ i
 .src/main/java/fr/uga/miage/m1/shapes/Cube.java,f\0\f0456013aa39b6fa0992305b4353f651dbe6d6cb
 j
 :src/main/java/fr/uga/miage/m1/persistence/JSonVisitor.java,a\b\ab527a4fac516e2d9d32bdf04a8ab3f177ec0122
-f
-6src/main/java/fr/uga/miage/m1/shapes/ShapeFactory.java,3\4\34dbf2b6b84d42fdce55caaf93222b4408eb4e55
 L
 src/test/java/GroupTest.java,e\1\e1d086e898ed91bc0178f559f7df80dd929ac7f4
 _
@@ -58,11 +50,19 @@ d
 4src/main/java/fr/uga/miage/m1/commands/AddShape.java,e\1\e1f2ed2b734d23b81e68b99d62d305637f321deb
 `
 0src/main/java/fr/uga/miage/m1/JDrawingFrame.java,0\1\017bb7cacb7df1960052cb9f0aa11f9f54aac5f5
-b
-2src/main/java/fr/uga/miage/m1/commands/Editor.java,1\e\1e5b3cfd48ecfe4e8c412d30e8d6c961ce57b96a
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 M
 src/test/java/EditorTest.java,1\a\1a10466daadabcad32f7084d2b92ed8b7a1677e8
 e
 5src/main/java/fr/uga/miage/m1/commands/MoveShape.java,3\8\380ed53f7c0cc55bd31eeac07fbc74d848898013
+c
+3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
+b
+2src/main/java/fr/uga/miage/m1/commands/Editor.java,1\e\1e5b3cfd48ecfe4e8c412d30e8d6c961ce57b96a
+S
+#src/test/java/ShapeFactoryTest.java,1\b\1bc12387dc8110da4a09db1e2d2e6d00e647a16e
+\
+,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
+f
+6src/main/java/fr/uga/miage/m1/shapes/ShapeFactory.java,3\4\34dbf2b6b84d42fdce55caaf93222b4408eb4e55

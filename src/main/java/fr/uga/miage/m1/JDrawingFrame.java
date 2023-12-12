@@ -437,7 +437,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     shape.accept(visitor);
                     res.append(visitor.getRepresentation());
                 }
-
             }
 
             res.append("\n\t</shapes>\n</root>");
