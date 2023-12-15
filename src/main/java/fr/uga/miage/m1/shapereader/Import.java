@@ -11,7 +11,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
 
+import fr.uga.miage.m1.shapes.Group;
 import fr.uga.miage.m1.shapes.ShapeFactory;
 import fr.uga.miage.m1.shapes.SimpleShape;
 import org.w3c.dom.Document;
@@ -39,46 +41,66 @@ public class Import {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document xmlDocument = db.parse(file.getPath());
             
-            NodeList shapes = xmlDocument.getDocumentElement().getElementsByTagName("shapes").item(0).getChildNodes();
-            
+            NodeList shapes = xmlDocument.getDocumentElement().getElementsByTagName("shapes");
+
             for (int i = 0; i < shapes.getLength(); i++) {
-                
-                Node shapeElement = shapes.item(i);
-                if 
-                Node shapeElement = shapes.item(i);
-                String type = shapeElement.getChildNodes().item(1).getTextContent();
+                NodeList shapeElements = shapes.item(i).getChildNodes();
 
-                int x = Integer.parseInt(shapeElement.getChildNodes().item(3).getTextContent());
-                int y = Integer.parseInt(shapeElement.getChildNodes().item(5).getTextContent());
-                int z = 0;
-                if (shapeElement.getChildNodes().item(7) != null) {
-                    z = Integer.parseInt(shapeElement.getChildNodes().item(7).getTextContent());
-                }
-                    
-                shapesList.add(ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.valueOf(type.toUpperCase()), x, y, z));
-            }
+                for (int j = 0; j < shapeElements.getLength(); j++) {
+                    Node shapeElement = shapeElements.item(j);
 
-            for (int i = 0; i < groups.getLength(); i++) {
-                NodeList groupShapes = groups.item(i).getChildNodes();
-                    List<SimpleShape> groupList = new ArrayList<>();
-                for (int j = 0; j < groupShapes.getLength(); j++) {
-                    Node groupShapeElement = groupShapes.item(j);
-                    String groupType = groupShapeElement.getChildNodes().item(1).getTextContent();
-                    int x = Integer.parseInt(groupShapeElement.getChildNodes().item(3).getTextContent());
-                    int y = Integer.parseInt(groupShapeElement.getChildNodes().item(5).getTextContent());
-                    int z = 0;
-
-                    if (groupShapeElement.getChildNodes().item(7) != null) {
-                        z = Integer.parseInt(groupShapeElement.getChildNodes().item(7).getTextContent());
+                    if (shapeElement.getNodeType() == Node.ELEMENT_NODE) {
+                        if (shapeElement.getNodeName().equals("shape")) {
+                            shapesList.add(createSimpleShape(shapeElement));
+                        } else if (shapeElement.getNodeName().equals("group")) {
+                            shapesList.add(createGroup(shapeElement));
+                        }
                     }
-                    groupList.add(ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.valueOf(groupType.toUpperCase()), x, y, z));
                 }
-                shapesList.add(ShapeFactory.getInstance().createGroup(groupList));
             }
 
         }
 
         return shapesList;
+    }
+    
+    /**
+     * Create a shape from a node
+     * @param shapeElement
+     * @return
+     */
+    private SimpleShape createSimpleShape(Node shapeElement) {
+
+        String type = shapeElement.getFirstChild().getNextSibling().getTextContent();
+        int x = Integer.parseInt(shapeElement.getFirstChild().getNextSibling().getNextSibling().getNextSibling().getTextContent());
+        int y = Integer.parseInt(shapeElement.getFirstChild().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getTextContent());
+        int z = 0;
+        if (shapeElement.getChildNodes().item(7) != null) {
+            z = Integer.parseInt(shapeElement.getFirstChild().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getTextContent());
+        }
+    
+        return ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.valueOf(type.toUpperCase()), x, y, z);
+    }
+
+    /**
+     * Create a group of shapes from a node
+     * @param shapeElement
+     * @return
+     */
+    private SimpleShape createGroup(Node shapeElement) {
+
+        List<SimpleShape> shapes = new ArrayList<>();
+    
+        NodeList shapeElements = shapeElement.getChildNodes();
+        for (int j = 0; j < shapeElements.getLength(); j++) {
+            Node shapeElem = shapeElements.item(j);
+    
+            if (shapeElem.getNodeType() == Node.ELEMENT_NODE) {
+                shapes.add(createSimpleShape(shapeElem));
+            }
+        }
+    
+        return ShapeFactory.getInstance().createGroup(shapes);
     }
 
     /**

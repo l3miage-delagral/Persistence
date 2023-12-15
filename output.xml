@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<shapes>
+		<shape>
+			<type>square</type>
+			<x>125</x>
+			<y>78</y>
+		</shape>
+		<shape>
+			<type>square</type>
+			<x>135</x>
+			<y>200</y>
+		</shape>
+		<group>
+		<shape>
+			<type>square</type>
+			<x>230</x>
+			<y>74</y>
+		</shape>
+		<shape>
+			<type>square</type>
+			<x>333</x>
+			<y>179</y>
+		</shape>
+		</group>
+
+	</shapes>
+</root>

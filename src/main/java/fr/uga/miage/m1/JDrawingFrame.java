@@ -420,6 +420,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         private void importXML() {
             try {
                 listShapes = imp.importXML();
+                for (SimpleShape shape : listShapes) {
+                    if (shape.getShapeName().contains("group")) {
+                        shape.validerGroup(Color.BLUE);
+                    }
+                }
                 this.paintComponents(this.getGraphics());
             } catch (Exception e) {
                 LOGGER.warning("Erreur lors de l'import du fichier XML : " + e.getMessage());
@@ -431,41 +436,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         private void exportXML() {
             LOGGER.info("Attention j'exporte");
             export.xmlExport(listShapes);
-            // StringBuilder res = new StringBuilder();
-            // res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
-
-            // for (SimpleShape shape : listShapes) {
-
-            //     if(shape.getShapeName().contains("group")){
-            //         res.append("\n\t\t<group>\n");
-
-            //         for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
-            //             shapeInGroup.accept(new XMLVisitor());
-            //             XMLVisitor visitor = new XMLVisitor();
-            //             shapeInGroup.accept(visitor);
-            //             res.append(visitor.getRepresentation());
-            //             res.append("\n");
-            //         }
-            //         res.append("\n\t\t</group>\n");
-                    
-
-            //     } else {
-            //         XMLVisitor visitor = new XMLVisitor();
-            //         shape.accept(visitor);
-            //         res.append(visitor.getRepresentation());
-            //     }
-            // }
-
-            // res.append("\n\t</shapes>\n</root>");
-
-            // // Convertir le StringBuilder en une chaîne
-            // String resultString = res.toString();
-
-            // LOGGER.info("*********************** Export XML ***********************");
-            // LOGGER.info(resultString);
-
-            // // Appeler la fenêtre d'enregistrement
-            // exportWindow("XML", resultString);
         }
 
         /**
