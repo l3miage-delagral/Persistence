@@ -38,12 +38,13 @@ public class Import {
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document xmlDocument = db.parse(file.getPath());
-
-            NodeList shapes = xmlDocument.getElementsByTagName("shape");
-            NodeList groups = xmlDocument.getElementsByTagName("group");
             
-            // shapes
+            NodeList shapes = xmlDocument.getDocumentElement().getElementsByTagName("shapes").item(0).getChildNodes();
+            
             for (int i = 0; i < shapes.getLength(); i++) {
+                
+                Node shapeElement = shapes.item(i);
+                if 
                 Node shapeElement = shapes.item(i);
                 String type = shapeElement.getChildNodes().item(1).getTextContent();
 
@@ -57,9 +58,8 @@ public class Import {
                 shapesList.add(ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.valueOf(type.toUpperCase()), x, y, z));
             }
 
-            // groups
             for (int i = 0; i < groups.getLength(); i++) {
-                NodeList groupShapes = .getChildNodes().item(3).getChildNodes();
+                NodeList groupShapes = groups.item(i).getChildNodes();
                     List<SimpleShape> groupList = new ArrayList<>();
                 for (int j = 0; j < groupShapes.getLength(); j++) {
                     Node groupShapeElement = groupShapes.item(j);
@@ -76,10 +76,6 @@ public class Import {
                 shapesList.add(ShapeFactory.getInstance().createGroup(groupList));
             }
 
-        }
-
-
-        
         }
 
         return shapesList;
