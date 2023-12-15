@@ -12,15 +12,14 @@ import fr.uga.miage.m1.persistence.Visitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.SimpleShape;
 
-public abstract class Export {
-
-    private final Visitor visitor = new XMLVisitor();
+public class Export {
 
     public void xmlExport(List<SimpleShape> shapesList) {
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<root>\n\t<shapes>\n");
 
         for (SimpleShape shape : shapesList) {
+            Visitor visitor = new XMLVisitor();
             shape.accept(visitor);
             sb.append(((XMLVisitor) visitor).getRepresentation());
         }
@@ -61,6 +60,7 @@ public abstract class Export {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
                 writer.write(content);
                 writer.flush();
+                content = "";
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new IllegalArgumentException("Erreur lors de l'enregistrement du fichier");
