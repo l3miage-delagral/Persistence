@@ -11,6 +11,7 @@ import fr.uga.miage.m1.shapes.ShapeFactory.Shapes;
 
 public class Group implements SimpleShape{
 
+    
     private final List<SimpleShape> groupList;
 
     public Group() {

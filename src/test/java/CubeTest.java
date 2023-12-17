@@ -5,14 +5,7 @@ import fr.uga.miage.m1.shapes.SimpleShape;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
-import java.awt.*;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class CubeTest {
 
@@ -45,7 +38,7 @@ class CubeTest {
         SimpleShape cube = ShapeFactory.getInstance().createSimpleShape(ShapeFactory.Shapes.CUBE, X, Y, 5);
         cube.accept(xml);
 
-        String expectedRes = "\t\t<shape>\n\t\t\t<type>" + cube.getShapeName() + "</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t\t<z>" + cube.getZ() + "</z>\n\t\t</shape>";
+        String expectedRes = "\t\t<shape>\n\t\t\t<type>" + cube.getShapeName() + "</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t\t<z>" + cube.getZ() + "</z>\n\t\t</shape>\n";
 
         Assertions.assertEquals(expectedRes, xml.getRepresentation());
     }

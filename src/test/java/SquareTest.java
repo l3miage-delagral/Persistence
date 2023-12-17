@@ -41,7 +41,7 @@ class SquareTest {
 
         XMLVisitor xml = new XMLVisitor();;
         ShapeFactory.getInstance().createSquare(X, Y).accept(xml);
-        String excpectedRes = "\t\t<shape>\n\t\t\t<type>square</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>";
+        String excpectedRes = "\t\t<shape>\n\t\t\t<type>square</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>\n";
 
         assertEquals(excpectedRes, xml.getRepresentation());
     }
