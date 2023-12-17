@@ -21,6 +21,7 @@
 * ``CTRL + Z (annuler) sur des actions effectuées.``
 * ``Ajouter des formes géométriques dans un groupe.``
 * ``Déplacer un groupe de formes dans le panel.``
+* ``Importer des formes depuis un fichier au format XML``
 
 
 # Itérations
@@ -34,6 +35,9 @@
 * ``CTRL + Z (annuler) sur des actions effectuées.``
 * ``Ajouter des formes géométriques dans un groupe.``
 * ``Déplacer un groupe de formes dans le panel.``
+
+``La troisième itération du projet a ajouté la fonctionnalité suivante :``
+* ``Importer des formes depuis un fichier au format XML``
 
 # Auteurs
 ``Lucas GIRY & Alex DELAGRANGE``
