@@ -6,10 +6,6 @@
 Q.idea/sonarlint/securityhotspotstore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,3\0\30205a209c6ce77c4cfc19a09e6f57c588b7fb88
 w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
-]
--.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
-S
-#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 h
 8src/main/java/fr/uga/miage/m1/persistence/Visitable.java,3\1\31704ec3ace0f91e0b928405a7362e385d085601
 f
@@ -38,8 +34,6 @@ i
 9src/main/java/fr/uga/miage/m1/persistence/XMLVisitor.java,6\4\6414a58e19058baa2f5fc3a2f02edfeb6e1fcf5c
 j
 :src/main/java/fr/uga/miage/m1/persistence/JSonVisitor.java,a\b\ab527a4fac516e2d9d32bdf04a8ab3f177ec0122
-L
-src/test/java/GroupTest.java,e\1\e1d086e898ed91bc0178f559f7df80dd929ac7f4
 _
 /src/main/java/fr/uga/miage/m1/shapes/Group.java,a\8\a8c995e29bc7010d8b81f4ff44197acbf142ac7a
 d
@@ -50,23 +44,3 @@ M
 src/test/java/EditorTest.java,1\a\1a10466daadabcad32f7084d2b92ed8b7a1677e8
 e
 5src/main/java/fr/uga/miage/m1/commands/MoveShape.java,3\8\380ed53f7c0cc55bd31eeac07fbc74d848898013
-S
-#src/test/java/ShapeFactoryTest.java,1\b\1bc12387dc8110da4a09db1e2d2e6d00e647a16e
-c
-3src/main/java/fr/uga/miage/m1/commands/Command.java,5\b\5ba3340fcf16a3e0f8a95274644979a7de39dc19
-b
-2src/main/java/fr/uga/miage/m1/commands/Editor.java,1\e\1e5b3cfd48ecfe4e8c412d30e8d6c961ce57b96a
-\
-,src/main/java/fr/uga/miage/m1/GUIHelper.java,1\6\162b786e45708c343db6a1ab85131d22faf25125
-f
-6src/main/java/fr/uga/miage/m1/shapes/ShapeFactory.java,3\4\34dbf2b6b84d42fdce55caaf93222b4408eb4e55
-e
-5src/main/java/fr/uga/miage/m1/shapereader/Import.java,1\0\108c4620981b2d48b0aff0d687dd732a0d989de1
-^
-.src/main/java/fr/uga/miage/m1/shapes/Cube.java,f\0\f0456013aa39b6fa0992305b4353f651dbe6d6cb
-e
-5src/main/java/fr/uga/miage/m1/shapereader/Export.java,4\6\46fa964dfe65176d37b49faf2d9a4c7ded8a763a
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-`
-0src/main/java/fr/uga/miage/m1/JDrawingFrame.java,0\1\017bb7cacb7df1960052cb9f0aa11f9f54aac5f5

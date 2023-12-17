@@ -60,15 +60,15 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private boolean groupingMode = false;
 
-    private transient Export export = new Export();
-    private transient Import imp = new Import();
+    private final transient Export export = new Export();
+    private final transient Import imp = new Import();
 
     /**
      * Tracks buttons to manage the background.
      */
     private final EnumMap<ShapeFactory.Shapes, JButton> buttons = new EnumMap<>(ShapeFactory.Shapes.class);
 
-    private JButton buttonGroup = new JButton("New Group", null);
+    private final JButton buttonGroup = new JButton("New Group", null);
     /**
      * Default constructor that populates the main window.
      *
@@ -101,9 +101,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         addButtonShape(ShapeFactory.Shapes.TRIANGLE, new ImageIcon(URL + "/resources/images/triangle.png"));
         addButtonShape(ShapeFactory.Shapes.CIRCLE, new ImageIcon(URL + "/resources/images/circle.png"));
         addButtonShape(ShapeFactory.Shapes.CUBE, new ImageIcon(URL + "/resources/images/underc.png"));
-        addButtonFile(buttonJSON, "JSON");
-        addButtonFile(buttonXML,"XML");
-        addButtonFile(importXML, "XML");
+        addButtonFile(buttonJSON);
+        addButtonFile(buttonXML);
+        addButtonFile(importXML);
         addButton(buttonGroup);
         setPreferredSize(new Dimension(400, 400));
 
@@ -155,23 +155,20 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         buttons.put(selected, button);
     }
 
-    private void addButtonFile(JButton button, String typeFile) {
+    private void addButtonFile(JButton button) {
         button.setBorderPainted(false);
         toolbar.add(button);
         toolbar.validate();
         repaint();
     
         // Crée un nouveau gestionnaire d'événements pour les boutons d'exportation
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                if (evt.getActionCommand().contains("Export JSON")) {
-                    exportJSON();
-                } else if (evt.getActionCommand().contains("Import XML")) {
-                    importXML();
-                } else if (evt.getActionCommand().contains("Export XML")) {
-                    exportXML();
-                }
+        button.addActionListener(evt -> {
+            if (evt.getActionCommand().contains("Export JSON")) {
+                exportJSON();
+            } else if (evt.getActionCommand().contains("Import XML")) {
+                importXML();
+            } else if (evt.getActionCommand().contains("Export XML")) {
+                exportXML();
             }
         });
     
@@ -299,9 +296,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
 
-    public void componentResized(MouseEvent e) { // default implementation ignored
-    }
-
     /**
      * Implements an empty method for the <tt>MouseMotionListener</tt>
      * interface.
@@ -373,6 +367,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         private void exportJSON() {
             StringBuilder res = new StringBuilder();
             boolean startedGroup = false;
+            final String group = "group";
 
             res.append("{\n\t\"shapes\" : [\n");
 
@@ -381,7 +376,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     res.append(",\n");
                 }
 
-                if(shape.getShapeName().contains("group")){
+                if(shape.getShapeName().contains(group)){
                     startedGroup = true;
                     res.append("\t\t{\n\t\t\t\"group\" : [\n");
 
@@ -394,7 +389,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                     }
 
 
-                } else if (shape.getShapeName().contains("group") && startedGroup) {
+                } else if (shape.getShapeName().contains(group) && startedGroup) {
                     startedGroup = false;
                     res.append("\n\t\t\t]\n\t\t}");
 

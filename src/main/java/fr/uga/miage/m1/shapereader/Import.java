@@ -44,22 +44,25 @@ public class Import {
             for (int i = 0; i < shapes.getLength(); i++) {
                 NodeList shapeElements = shapes.item(i).getChildNodes();
 
-                for (int j = 0; j < shapeElements.getLength(); j++) {
-                    Node shapeElement = shapeElements.item(j);
-
-                    if (shapeElement.getNodeType() == Node.ELEMENT_NODE) {
-                        if (shapeElement.getNodeName().equals("shape")) {
-                            shapesList.add(createSimpleShape(shapeElement));
-                        } else if (shapeElement.getNodeName().equals("group")) {
-                            shapesList.add(createGroup(shapeElement));
-                        }
-                    }
-                }
+                addShapeToList(shapesList, shapeElements);
             }
-
         }
 
         return shapesList;
+    }
+
+    public void addShapeToList(List<SimpleShape> shapesList, NodeList shapeElements) {
+        for (int j = 0; j < shapeElements.getLength(); j++) {
+            Node shapeElement = shapeElements.item(j);
+
+            if (shapeElement.getNodeType() == Node.ELEMENT_NODE) {
+                if (shapeElement.getNodeName().equals("shape")) {
+                    shapesList.add(createSimpleShape(shapeElement));
+                } else if (shapeElement.getNodeName().equals("group")) {
+                    shapesList.add(createGroup(shapeElement));
+                }
+            }
+        }
     }
     
     /**

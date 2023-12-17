@@ -70,8 +70,8 @@ class GroupTest {
         group.add(triangle);
         group.add(square);
         group.move(50, 50);
-        assertEquals(square.getX(), 100);
-        assertEquals(square.getY(), 150);
+        assertEquals(100, square.getX());
+        assertEquals(150, square.getY());
     }
     
 }

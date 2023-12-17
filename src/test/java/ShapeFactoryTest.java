@@ -40,21 +40,21 @@ ShapeFactory shapeFactory = ShapeFactory.getInstance();
     @Test
     void testCreateSquare() {
         SimpleShape square = shapeFactory.createSquare(50, 50);
-        assertEquals(square.getShapeType(), ShapeFactory.Shapes.SQUARE);
-        assertEquals(square.getX(),25);
-        assertEquals(square.getY(), 25);
+        assertEquals(ShapeFactory.Shapes.SQUARE, square.getShapeType());
+        assertEquals(25, square.getX());
+        assertEquals(25, square.getY());
     }
 
     @Test
     void testCreateCircle() {
         SimpleShape circle = shapeFactory.createCircle(25, 75);
-        assertEquals(circle.getShapeType(), ShapeFactory.Shapes.CIRCLE);
+        assertEquals(ShapeFactory.Shapes.CIRCLE, circle.getShapeType());
     }
 
     @Test
     void testCreateTriangle() {
         SimpleShape triangle = shapeFactory.createTriangle(100, 150);
-        assertEquals(triangle.getShapeType(), ShapeFactory.Shapes.TRIANGLE);
+        assertEquals(ShapeFactory.Shapes.TRIANGLE, triangle.getShapeType());
     }
 
     @Test
@@ -63,7 +63,7 @@ ShapeFactory shapeFactory = ShapeFactory.getInstance();
         list.add(shapeFactory.createSquare(25, 50));
         list.add(shapeFactory.createCircle(75, 100));
         SimpleShape group = shapeFactory.createGroup(list);
-        assertEquals(group.getShapeType(), ShapeFactory.Shapes.GROUP);
+        assertEquals(ShapeFactory.Shapes.GROUP, group.getShapeType());
 
     }
 
@@ -71,9 +71,9 @@ ShapeFactory shapeFactory = ShapeFactory.getInstance();
     void testCreateSimpleShape() {
         Shapes selected = ShapeFactory.Shapes.CUBE;
         SimpleShape shape = shapeFactory.createSimpleShape(selected, 125, 200, 50);
-        assertEquals(shape.getShapeType(), ShapeFactory.Shapes.CUBE);
-        assertEquals(shape.getX(), 100);
-        assertEquals(shape.getY(), 175);
-        assertEquals(shape.getZ(), 50);
+        assertEquals(ShapeFactory.Shapes.CUBE, shape.getShapeType());
+        assertEquals(100, shape.getX());
+        assertEquals(175, shape.getY());
+        assertEquals(50, shape.getZ());
     }
 }
