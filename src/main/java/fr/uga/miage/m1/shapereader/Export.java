@@ -1,16 +1,15 @@
 package fr.uga.miage.m1.shapereader;
 
+import fr.uga.miage.m1.persistence.Visitor;
+import fr.uga.miage.m1.persistence.XMLVisitor;
+import fr.uga.miage.m1.shapes.SimpleShape;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import fr.uga.miage.m1.persistence.Visitor;
-import fr.uga.miage.m1.persistence.XMLVisitor;
-import fr.uga.miage.m1.shapes.SimpleShape;
 
 public class Export {
 
