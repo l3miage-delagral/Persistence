@@ -5,8 +5,9 @@ import fr.uga.miage.m1.commands.Command;
 import fr.uga.miage.m1.commands.Editor;
 import fr.uga.miage.m1.commands.MoveShape;
 import fr.uga.miage.m1.persistence.JSonVisitor;
-import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.*;
+import fr.uga.miage.m1.shapereader.Export;
+import fr.uga.miage.m1.shapereader.Import;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -42,7 +43,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient ActionListener reusableActionListener = new ShapeActionListener();
 
-    private final transient List<SimpleShape> listShapes = new ArrayList<>();
+    private transient List<SimpleShape> listShapes = new ArrayList<>();
 
     private transient Group selectedGroup = null;
 
@@ -58,6 +59,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     private int startingDragY;
 
     private boolean groupingMode = false;
+
+    private transient Export export = new Export();
+    private transient Import imp = new Import();
 
     /**
      * Tracks buttons to manage the background.
@@ -85,6 +89,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         label = new JLabel(" ", SwingConstants.CENTER);
         JButton buttonJSON = new JButton("Export JSON", null);
         JButton buttonXML = new JButton("Export XML", null);
+        JButton importXML = new JButton("Import XML", null);
 
         // Fills the panel
         setLayout(new BorderLayout());
@@ -98,6 +103,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         addButtonShape(ShapeFactory.Shapes.CUBE, new ImageIcon(URL + "/resources/images/underc.png"));
         addButtonFile(buttonJSON, "JSON");
         addButtonFile(buttonXML,"XML");
+        addButtonFile(importXML, "XML");
         addButton(buttonGroup);
         setPreferredSize(new Dimension(400, 400));
 
@@ -159,9 +165,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                if (evt.getActionCommand().contains("JSON")) {
+                if (evt.getActionCommand().contains("Export JSON")) {
                     exportJSON();
-                } else if (evt.getActionCommand().contains("XML")) {
+                } else if (evt.getActionCommand().contains("Import XML")) {
+                    importXML();
+                } else if (evt.getActionCommand().contains("Export XML")) {
                     exportXML();
                 }
             }
@@ -409,47 +417,25 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
 
 
-
+        private void importXML() {
+            try {
+                listShapes = imp.importXML();
+                for (SimpleShape shape : listShapes) {
+                    if (shape.getShapeName().contains("group")) {
+                        shape.validerGroup(Color.BLUE);
+                    }
+                }
+                this.paintComponents(this.getGraphics());
+            } catch (Exception e) {
+                LOGGER.warning("Erreur lors de l'import du fichier XML : " + e.getMessage());
+            }
+        }
         /**
          * Creation of XML string for XML export
          */
         private void exportXML() {
-            StringBuilder res = new StringBuilder();
-            res.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n\t<shapes>\n");
-
-            for (SimpleShape shape : listShapes) {
-
-                if(shape.getShapeName().contains("group")){
-                    res.append("\n\t\t<group>\n");
-
-                    for (SimpleShape shapeInGroup : ((Group) shape).getListGroup()) {
-                        shapeInGroup.accept(new XMLVisitor());
-                        XMLVisitor visitor = new XMLVisitor();
-                        shapeInGroup.accept(visitor);
-                        res.append(visitor.getRepresentation());
-                        res.append("\n");
-                    }
-                    res.append("\n\t\t</group>\n");
-                    
-
-                } else {
-                    XMLVisitor visitor = new XMLVisitor();
-                    shape.accept(visitor);
-                    res.append(visitor.getRepresentation());
-                }
-
-            }
-
-            res.append("\n\t</shapes>\n</root>");
-
-            // Convertir le StringBuilder en une chaîne
-            String resultString = res.toString();
-
-            LOGGER.info("*********************** Export XML ***********************");
-            LOGGER.info(resultString);
-
-            // Appeler la fenêtre d'enregistrement
-            exportWindow("XML", resultString);
+            LOGGER.info("Attention j'exporte");
+            export.xmlExport(listShapes);
         }
 
         /**

@@ -45,7 +45,7 @@ class CircleTest {
         XMLVisitor xml = new XMLVisitor();;
         ShapeFactory.getInstance().createCircle(X, Y).accept(xml);
 
-        String excpectedRes = "\t\t<shape>\n\t\t\t<type>circle</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>";
+        String excpectedRes = "\t\t<shape>\n\t\t\t<type>circle</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>\n";
 
         assertEquals(excpectedRes, xml.getRepresentation());
     }
@@ -61,7 +61,7 @@ class CircleTest {
         graphics = mock(Graphics2D.class);
         ShapeFactory.getInstance().createCircle(X, Y).draw(graphics);
 
-        // verifier que graphics a bien executé setRenderingHint
+        // verifier que graphics a bien executï¿½ setRenderingHint
         verify(graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // pareil pour fill

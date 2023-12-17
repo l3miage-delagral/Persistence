@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<shapes>
+		<shape>
+			<type>triangle</type>
+			<x>44</x>
+			<y>82</y>
+		</shape>
+		<shape>
+			<type>circle</type>
+			<x>145</x>
+			<y>60</y>
+		</shape>
+		<group>
+		<shape>
+			<type>square</type>
+			<x>262</x>
+			<y>132</y>
+		</shape>
+		</group>
+
+	</shapes>
+</root>

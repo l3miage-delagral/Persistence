@@ -1,5 +1,6 @@
 package fr.uga.miage.m1.shapes;
 
+import java.util.List;
 
 public class ShapeFactory {
     public enum Shapes {
@@ -32,6 +33,9 @@ public class ShapeFactory {
         return new Triangle(x, y);
     }
 
+    public SimpleShape createGroup(List<SimpleShape> list) {
+        return new Group(list);
+    }
 
     public SimpleShape createSimpleShape(Shapes selected, int x, int y, int z) {
         SimpleShape shape = null;

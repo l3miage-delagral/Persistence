@@ -3,7 +3,6 @@ package fr.uga.miage.m1.shapes;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import fr.uga.miage.m1.shapes.ShapeFactory.Shapes;
 
 public class Group implements SimpleShape{
 
+    
     private final List<SimpleShape> groupList;
 
     public Group() {

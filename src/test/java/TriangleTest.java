@@ -2,7 +2,7 @@ import fr.uga.miage.m1.persistence.JSonVisitor;
 import fr.uga.miage.m1.persistence.XMLVisitor;
 import fr.uga.miage.m1.shapes.ShapeFactory;
 import fr.uga.miage.m1.shapes.SimpleShape;
-import net.bytebuddy.build.Plugin;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class TriangleTest {
         XMLVisitor xml = new XMLVisitor();;
         SimpleShape triangle = ShapeFactory.getInstance().createTriangle(X, Y);
         triangle.accept(xml);
-        String excpectedRes = "\t\t<shape>\n\t\t\t<type>" + triangle.getShapeName() + "</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>";
+        String excpectedRes = "\t\t<shape>\n\t\t\t<type>" + triangle.getShapeName() + "</type>\n\t\t\t<x>" + MX + "</x>\n\t\t\t<y>" + MY + "</y>\n\t\t</shape>\n";
 
         Assertions.assertEquals(excpectedRes, xml.getRepresentation());
     }

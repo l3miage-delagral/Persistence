@@ -15,6 +15,11 @@
     <dependencies>
         <dependency>
             <groupId>edu.uga.miage.m1</groupId>
+            <artifactId>edu.uga.shapereader</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.uga.miage.m1</groupId>
             <artifactId>edu.uga.singleshape</artifactId>
             <version>1.0.0</version>
         </dependency>
