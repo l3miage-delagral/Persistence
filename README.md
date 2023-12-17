@@ -25,7 +25,7 @@
 
 
 # Itérations
-``Les documents de conception se trouvent dans le dossier conception/IT2.``
+``Les documents de conception se trouvent dans le dossier conception/IT3.``
 
 ``La première itération du projet à ajouté les fonctionnalités suivantes :``
 * ``Placer des formes géométriques dans un panel.``
