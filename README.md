@@ -38,6 +38,7 @@
 
 ``La troisième itération du projet a ajouté la fonctionnalité suivante :``
 * ``Importer des formes depuis un fichier au format XML``
+* ``Importer ou exporter des formes sont maintenant gérés par le jar``
 
 # Auteurs
 ``Lucas GIRY & Alex DELAGRANGE``
